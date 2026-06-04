@@ -3,25 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    
-    <!-- Updated Title -->
-    <title>Quote Vault Pro | Explorer & Manager</title>
-    
-    <!-- Dynamic Favicon (Quote Icon) -->
+    <title>Quote Vault Pro | Manager</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
-
     <style>
         :root {
             --glass: rgba(255, 255, 255, 0.07);
             --glass-border: rgba(255, 255, 255, 0.12);
             --accent: #3b82f6;
+            --done: #22c55e;
+            --remove: #ef4444;
             --text: #f8fafc;
             --bg: #0f172a;
         }
 
         body {
             margin: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
             background: radial-gradient(circle at top right, #1e293b, #0f172a);
             background-attachment: fixed;
             color: var(--text);
@@ -31,7 +28,6 @@
         header {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             padding: 16px;
             position: sticky;
             top: 0;
@@ -40,19 +36,13 @@
             text-align: center;
             font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: 1px;
         }
 
-        .container {
-            padding: 16px;
-            max-width: 1100px;
-            margin: auto;
-        }
+        .container { padding: 16px; max-width: 1100px; margin: auto; }
 
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 20px;
@@ -60,61 +50,38 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
-        .url-preview-box {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 15px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        #preview-url {
-            font-family: monospace;
-            font-size: 12px;
-            color: #93c5fd;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            flex: 1;
-        }
-
-        .tabs, .pages {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 10px 0;
-            scrollbar-width: none;
-            align-items: center;
-        }
-
-        .tab, .page {
-            padding: 10px 18px;
-            background: var(--glass);
-            border-radius: 12px;
-            cursor: pointer;
-            border: 1px solid var(--glass-border);
-            white-space: nowrap;
-            transition: 0.3s;
-            font-size: 14px;
-            color: #cbd5e1;
-        }
-
-        .active {
-            background: var(--accent) !important;
-            color: white !important;
-            border-color: var(--accent);
-        }
-
-        .page.dots { cursor: default; border: none; background: transparent; }
-
         .filters {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
+            align-items: center;
         }
+
+        .status-toggles {
+            display: flex;
+            gap: 8px;
+            grid-column: span 1;
+        }
+
+        .toggle-chip {
+            flex: 1;
+            padding: 9px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            font-size: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .toggle-chip.active.green { background: var(--done); color: white; border-color: var(--done); }
+        .toggle-chip.active.red { background: var(--remove); color: white; border-color: var(--remove); }
 
         input, select, button {
             padding: 12px;
@@ -123,14 +90,11 @@
             background: rgba(0, 0, 0, 0.2);
             color: white;
             outline: none;
+            font-size: 13px;
         }
 
-        button {
-            background: var(--accent);
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-        }
+        button { background: var(--accent); font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+        button:disabled { background: #475569; cursor: not-allowed; }
 
         #quotes {
             display: grid;
@@ -139,68 +103,39 @@
             margin-top: 20px;
         }
 
-        .quote-card {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 180px;
-            transition: transform 0.2s;
-        }
-        .quote-card:hover { transform: translateY(-5px); }
-
-        .quoteText {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            white-space: pre-wrap;
-        }
+        .quote-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; }
+        .quoteText { font-size: 17px; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
 
         .meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 12px;
-            margin-top: 12px;
-            padding-top: 12px;
             border-top: 1px solid var(--glass-border);
+            padding-top: 12px;
             color: #94a3b8;
         }
 
-        .item-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .action-row { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-sm { padding: 8px; font-size: 11px; flex: 1; border-radius: 8px; cursor: pointer; border: none; color: white; }
+        .btn-done { background: var(--done); }
+        .btn-remove { background: var(--remove); }
+        .btn-copy { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); }
 
-        .item-copy-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            padding: 5px 10px;
-            font-size: 11px;
-            width: auto;
-            border-radius: 8px;
-            color: #cbd5e1;
-            cursor: pointer;
+        .tabs, .pages { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; align-items: center; }
+        .tab, .page {
+            padding: 10px 18px; background: var(--glass); border-radius: 12px; cursor: pointer;
+            border: 1px solid var(--glass-border); white-space: nowrap; font-size: 14px; transition: 0.3s;
         }
-        .item-copy-btn:hover { background: var(--accent); color: white; }
+        .page.active { background: var(--accent) !important; border-color: var(--accent); color: white; }
+        .page.dots { cursor: default; border: none; background: transparent; }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        @media (min-width: 600px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .stat-item { background: var(--glass); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); }
+        .stat-item b { display: block; color: var(--accent); font-size: 18px; }
+        .stat-item span { font-size: 10px; color: #64748b; text-transform: uppercase; }
 
-        .stat-item {
-            background: var(--glass);
-            padding: 15px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-        }
-        .stat-item b { display: block; font-size: 18px; color: var(--accent); }
-        .stat-item span { font-size: 11px; text-transform: uppercase; color: #64748b; }
+        .url-preview { font-family: monospace; font-size: 10px; color: #60a5fa; margin-top: 10px; word-break: break-all; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -209,18 +144,12 @@
 
 <div class="container">
 
-    <!-- API Config & URL Preview -->
     <div class="glass-card">
         <div style="display: flex; gap: 8px;">
             <input id="api" style="flex:1" value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
-            <button onclick="loadSheets()" style="width: auto;">Connect Engine</button>
+            <button onclick="loadSheets()">Connect</button>
         </div>
-        
-        <div class="url-preview-box">
-            <span style="font-size: 10px; color: #64748b; font-weight: bold;">LIVE ENDPOINT:</span>
-            <div id="preview-url">Awaiting connection...</div>
-            <button style="width:auto; padding: 5px 10px; font-size: 11px;" onclick="copyText(document.getElementById('preview-url').textContent)">Copy</button>
-        </div>
+        <div id="preview-url" class="url-preview">Ready to connect...</div>
     </div>
 
     <div id="tabs" class="tabs"></div>
@@ -228,27 +157,31 @@
     <div class="glass-card">
         <div class="filters">
             <input id="search" placeholder="Search keywords...">
+            
+            <div class="status-toggles">
+                <div id="hideDone" class="toggle-chip active red" onclick="this.classList.toggle('active'); loadData();">XUpdated</div>
+                <div id="hideRemoved" class="toggle-chip active red" onclick="this.classList.toggle('active'); loadData();">Removed</div>
+            </div>
+
             <select id="month">
                 <option value="">All Months</option>
-                <option value="1">January</option><option value="2">February</option>
-                <option value="3">March</option><option value="4">April</option>
-                <option value="5">May</option><option value="6">June</option>
-                <option value="7">July</option><option value="8">August</option>
-                <option value="9">September</option><option value="10">October</option>
-                <option value="11">November</option><option value="12">December</option>
+                <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+                <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+                <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+                <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
             </select>
             <input type="date" id="from">
             <input type="date" id="to">
             <select id="limit">
                 <option>10</option><option selected>20</option><option>50</option><option>100</option>
             </select>
-            <button onclick="page=1;loadData()">Update Feed</button>
+            <button onclick="page=1;loadData()">Apply</button>
         </div>
     </div>
 
     <div class="stats" id="stats"></div>
     <div id="quotes"></div>
-    <div class="pages" id="pagination"></div>
+    <div id="pagination" class="pages"></div>
 
 </div>
 
@@ -257,15 +190,17 @@ let currentSheet = "tweets";
 let page = 1;
 let total = 0;
 
-async function getJson(url) {
-    const r = await fetch(url);
+async function apiCall(url, method = 'GET', body = null) {
+    const options = { method };
+    if (body) options.body = JSON.stringify(body);
+    const r = await fetch(url, options);
     return r.json();
 }
 
 async function loadSheets() {
     const api = document.getElementById('api').value;
     try {
-        const sheets = await getJson(api + '?sheet=tweets&action=sheets');
+        const sheets = await apiCall(api + '?sheet=tweets&action=sheets');
         const box = document.getElementById('tabs');
         box.innerHTML = '';
         sheets.forEach(s => {
@@ -273,8 +208,7 @@ async function loadSheets() {
             d.className = 'tab';
             d.textContent = s;
             d.onclick = () => {
-                currentSheet = s;
-                page = 1;
+                currentSheet = s; page = 1;
                 document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
                 d.classList.add('active');
                 loadData();
@@ -282,7 +216,7 @@ async function loadSheets() {
             box.appendChild(d);
         });
         if(sheets.length > 0) box.firstChild.click();
-    } catch(e) { alert("Check API Connection"); }
+    } catch(e) { alert("API Connection Failed"); }
 }
 
 async function loadData() {
@@ -294,6 +228,9 @@ async function loadData() {
     const to = document.getElementById('to').value;
     const limit = document.getElementById('limit').value;
 
+    const hideDone = document.getElementById('hideDone').classList.contains('active');
+    const hideRemoved = document.getElementById('hideRemoved').classList.contains('active');
+
     let url = `${api}?sheet=${currentSheet}&page=${page}&limit=${limit}`;
     if (search) url += `&contains=${encodeURIComponent(search)}`;
     if (month) url += `&month=${month}`;
@@ -301,45 +238,75 @@ async function loadData() {
 
     document.getElementById('preview-url').textContent = url;
 
-    const res = await getJson(url);
-    const data = res.data || [];
+    const res = await apiCall(url);
+    let data = res.data || [];
+    
+    // Independent Filtering Logic
+    if(hideDone) data = data.filter(r => r.xupdate !== 'DONE');
+    if(hideRemoved) data = data.filter(r => r.remove !== 'remove');
+
     total = res.total || data.length;
 
     document.getElementById('stats').innerHTML = `
-        <div class="stat-item"><b>${total}</b><span>Quotes</span></div>
+        <div class="stat-item"><b>${total}</b><span>Total</span></div>
         <div class="stat-item"><b>${page}</b><span>Page</span></div>
         <div class="stat-item"><b>${limit}</b><span>Limit</span></div>
         <div class="stat-item"><b>${currentSheet}</b><span>Source</span></div>
     `;
 
-    const quotesContainer = document.getElementById('quotes');
-    quotesContainer.innerHTML = '';
+    const container = document.getElementById('quotes');
+    container.innerHTML = '';
 
     data.forEach((r) => {
-        const text = r.content || r.quote || r.text || "";
+        const text = r.content || r.quote || "";
         const rawDate = r.datetime || r.date || '';
-        let dateStr = rawDate ? new Date(rawDate).toLocaleDateString() : 'No Date';
+        const dateStr = rawDate ? new Date(rawDate).toLocaleDateString() : 'No Date';
+        const escapedText = text.replace(/`/g, '\\`').replace(/\$/g, '\\$');
 
         let div = document.createElement('div');
         div.className = 'glass-card quote-card';
-        
-        // Sanitize for onclick
-        const escapedText = text.replace(/`/g, '\\`').replace(/\$/g, '\\$');
-
         div.innerHTML = `
             <div class="quoteText">${text}</div>
-            <div class="meta">
-                <span>📅 ${dateStr}</span>
-                <div class="item-actions">
-                    <button class="item-copy-btn" onclick="copyQuote(this, \`${escapedText}\`)">📋 Copy</button>
-                    <span>❤️ ${r.likes || 0}</span>
-                    <span>👁️ ${r.views || 0}</span>
+            <div>
+                <div class="meta">
+                    <span>📅 ${dateStr}</span>
+                    <div style="display:flex; gap:8px">
+                        <span>❤️ ${r.likes || 0}</span>
+                        <span>👁️ ${r.views || 0}</span>
+                    </div>
+                </div>
+                <div class="action-row">
+                    <button class="btn-sm btn-copy" onclick="copyQuote(this, \`${escapedText}\`)">📋 Copy</button>
+                    <button class="btn-sm btn-done" onclick="updateRow(this, \`${r.tweetURL}\`, 'xupdate', 'DONE')">✔ Xupdate</button>
+                    <button class="btn-sm btn-remove" onclick="updateRow(this, \`${r.tweetURL}\`, 'remove', 'remove')">✖ Remove</button>
                 </div>
             </div>`;
-        quotesContainer.appendChild(div);
+        container.appendChild(div);
     });
 
     buildPagination(parseInt(limit));
+}
+
+async function updateRow(btn, identifier, column, value) {
+    const api = document.getElementById('api').value;
+    btn.disabled = true;
+    btn.innerHTML = "⏳";
+
+    const payload = {
+        action: "update",
+        sheet: currentSheet,
+        where: { "tweetURL": identifier }, 
+        data: { [column]: value }
+    };
+
+    try {
+        await fetch(api, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        btn.innerHTML = "✅";
+        setTimeout(() => loadData(), 1000);
+    } catch (e) {
+        btn.innerHTML = "❌";
+        btn.disabled = false;
+    }
 }
 
 function buildPagination(limit) {
@@ -358,36 +325,38 @@ function buildPagination(limit) {
         return d;
     };
 
+    // Prev Button
     if (page > 1) box.appendChild(createBtn(page - 1, '◀ Prev'));
+
+    // First Page
     box.appendChild(createBtn(1, '1', page === 1));
 
-    let start = Math.max(2, page - 2);
-    let end = Math.min(totalPages - 1, page + 2);
+    // Middle Logic with Dots
+    let start = Math.max(2, page - 1);
+    let end = Math.min(totalPages - 1, page + 1);
 
     if (start > 2) box.appendChild(createBtn(0, '...', false, true));
+
     for (let i = start; i <= end; i++) {
         box.appendChild(createBtn(i, i, page === i));
     }
+
     if (end < totalPages - 1) box.appendChild(createBtn(0, '...', false, true));
 
-    if (totalPages > 1) box.appendChild(createBtn(totalPages, totalPages, page === totalPages));
+    // Last Page
+    if (totalPages > 1) {
+        box.appendChild(createBtn(totalPages, totalPages, page === totalPages));
+    }
+
+    // Next Button
     if (page < totalPages) box.appendChild(createBtn(page + 1, 'Next ▶'));
 }
 
 function copyQuote(btn, text) {
     navigator.clipboard.writeText(text);
-    const original = btn.innerHTML;
-    btn.innerHTML = "✅ Saved";
-    btn.style.borderColor = "#22c55e";
-    setTimeout(() => {
-        btn.innerHTML = original;
-        btn.style.borderColor = "var(--glass-border)";
-    }, 1500);
-}
-
-function copyText(val) {
-    navigator.clipboard.writeText(val);
-    alert("Copied to clipboard!");
+    const old = btn.innerHTML;
+    btn.innerHTML = "✅ Copied";
+    setTimeout(() => btn.innerHTML = old, 1200);
 }
 
 window.onload = loadSheets;
