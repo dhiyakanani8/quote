@@ -60,7 +60,6 @@
         .status-toggles {
             display: flex;
             gap: 8px;
-            grid-column: span 1;
         }
 
         .toggle-chip {
@@ -103,7 +102,7 @@
             margin-top: 20px;
         }
 
-        .quote-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; }
+        .quote-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; margin-bottom: 0; }
         .quoteText { font-size: 17px; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
 
         .meta {
@@ -122,13 +121,12 @@
         .btn-remove { background: var(--remove); }
         .btn-copy { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); }
 
-        .tabs, .pages { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; align-items: center; }
-        .tab, .page {
+        .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; align-items: center; }
+        .tab {
             padding: 10px 18px; background: var(--glass); border-radius: 12px; cursor: pointer;
             border: 1px solid var(--glass-border); white-space: nowrap; font-size: 14px; transition: 0.3s;
         }
-        .page.active { background: var(--accent) !important; border-color: var(--accent); color: white; }
-        .page.dots { cursor: default; border: none; background: transparent; }
+        .tab.active { background: var(--accent); border-color: var(--accent); color: white; }
 
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
         .stat-item { background: var(--glass); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); }
@@ -136,6 +134,26 @@
         .stat-item span { font-size: 10px; color: #64748b; text-transform: uppercase; }
 
         .url-preview { font-family: monospace; font-size: 10px; color: #60a5fa; margin-top: 10px; word-break: break-all; opacity: 0.7; }
+
+        /* Infinite Scroll Loader */
+        #loader {
+            text-align: center;
+            padding: 40px;
+            font-size: 14px;
+            color: #94a3b8;
+            grid-column: 1 / -1;
+        }
+        .spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -159,8 +177,8 @@
             <input id="search" placeholder="Search keywords...">
             
             <div class="status-toggles">
-                <div id="hideDone" class="toggle-chip active red" onclick="this.classList.toggle('active'); loadData();">XUpdated</div>
-                <div id="hideRemoved" class="toggle-chip active red" onclick="this.classList.toggle('active'); loadData();">Removed</div>
+                <div id="hideDone" class="toggle-chip active red" onclick="toggleFilter(this)">XUpdated</div>
+                <div id="hideRemoved" class="toggle-chip active red" onclick="toggleFilter(this)">Removed</div>
             </div>
 
             <select id="month">
@@ -172,23 +190,37 @@
             </select>
             <input type="date" id="from">
             <input type="date" id="to">
-            <select id="limit">
-                <option>10</option><option selected>20</option><option>50</option><option>100</option>
-            </select>
-            <button onclick="page=1;loadData()">Apply</button>
+            <button onclick="applyFilters()">Apply Filters</button>
         </div>
     </div>
 
     <div class="stats" id="stats"></div>
+    
     <div id="quotes"></div>
-    <div id="pagination" class="pages"></div>
+    
+    <!-- Sentinel element for Intersection Observer -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <div>Loading more quotes...</div>
+    </div>
 
 </div>
 
 <script>
-let currentSheet = "tweets";
+let currentSheet = "";
 let page = 1;
-let total = 0;
+const limit = 20;
+let isLoading = false;
+let hasMore = true;
+
+// Initialize Intersection Observer
+const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !isLoading && hasMore) {
+        loadData(true);
+    }
+}, { threshold: 0.1 });
+
+observer.observe(document.getElementById('loader'));
 
 async function apiCall(url, method = 'GET', body = null) {
     const options = { method };
@@ -203,30 +235,45 @@ async function loadSheets() {
         const sheets = await apiCall(api + '?sheet=tweets&action=sheets');
         const box = document.getElementById('tabs');
         box.innerHTML = '';
-        sheets.forEach(s => {
+        sheets.forEach((s, idx) => {
             let d = document.createElement('div');
             d.className = 'tab';
             d.textContent = s;
             d.onclick = () => {
-                currentSheet = s; page = 1;
+                if (currentSheet === s) return;
+                currentSheet = s;
                 document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
                 d.classList.add('active');
-                loadData();
+                applyFilters();
             };
             box.appendChild(d);
+            if(idx === 0) d.click();
         });
-        if(sheets.length > 0) box.firstChild.click();
     } catch(e) { alert("API Connection Failed"); }
 }
 
-async function loadData() {
-    if (!currentSheet) return;
+function toggleFilter(el) {
+    el.classList.toggle('active');
+    applyFilters();
+}
+
+function applyFilters() {
+    page = 1;
+    hasMore = true;
+    document.getElementById('quotes').innerHTML = '';
+    document.getElementById('loader').style.display = 'block';
+    loadData(false);
+}
+
+async function loadData(isAppend = false) {
+    if (!currentSheet || isLoading || !hasMore) return;
+    
+    isLoading = true;
     const api = document.getElementById('api').value;
     const search = document.getElementById('search').value;
     const month = document.getElementById('month').value;
     const from = document.getElementById('from').value;
     const to = document.getElementById('to').value;
-    const limit = document.getElementById('limit').value;
 
     const hideDone = document.getElementById('hideDone').classList.contains('active');
     const hideRemoved = document.getElementById('hideRemoved').classList.contains('active');
@@ -238,24 +285,38 @@ async function loadData() {
 
     document.getElementById('preview-url').textContent = url;
 
-    const res = await apiCall(url);
-    let data = res.data || [];
-    
-    // Independent Filtering Logic
-    if(hideDone) data = data.filter(r => r.xupdate !== 'DONE');
-    if(hideRemoved) data = data.filter(r => r.remove !== 'remove');
+    try {
+        const res = await apiCall(url);
+        let data = res.data || [];
+        
+        // Filter logic
+        if(hideDone) data = data.filter(r => r.xupdate !== 'DONE');
+        if(hideRemoved) data = data.filter(r => r.remove !== 'remove');
 
-    total = res.total || data.length;
+        if (data.length < 1) {
+            hasMore = false;
+            document.getElementById('loader').style.display = 'none';
+        }
 
-    document.getElementById('stats').innerHTML = `
-        <div class="stat-item"><b>${total}</b><span>Total</span></div>
-        <div class="stat-item"><b>${page}</b><span>Page</span></div>
-        <div class="stat-item"><b>${limit}</b><span>Limit</span></div>
-        <div class="stat-item"><b>${currentSheet}</b><span>Source</span></div>
-    `;
+        renderQuotes(data, isAppend);
+        
+        document.getElementById('stats').innerHTML = `
+            <div class="stat-item"><b>${res.total || '...'}</b><span>Total Available</span></div>
+            <div class="stat-item"><b>${page}</b><span>Pages Loaded</span></div>
+            <div class="stat-item"><b>${currentSheet}</b><span>Source</span></div>
+        `;
 
+        page++;
+    } catch (e) {
+        console.error("Load failed", e);
+    } finally {
+        isLoading = false;
+    }
+}
+
+function renderQuotes(data, append) {
     const container = document.getElementById('quotes');
-    container.innerHTML = '';
+    if (!append) container.innerHTML = '';
 
     data.forEach((r) => {
         const text = r.content || r.quote || "";
@@ -283,12 +344,11 @@ async function loadData() {
             </div>`;
         container.appendChild(div);
     });
-
-    buildPagination(parseInt(limit));
 }
 
 async function updateRow(btn, identifier, column, value) {
     const api = document.getElementById('api').value;
+    const originalContent = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = "⏳";
 
@@ -300,56 +360,19 @@ async function updateRow(btn, identifier, column, value) {
     };
 
     try {
+        // Using fetch with no-cors as per original setup
         await fetch(api, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
         btn.innerHTML = "✅";
-        setTimeout(() => loadData(), 1000);
+        // Visually hide the card after a short delay since it's now 'done/removed'
+        setTimeout(() => {
+            btn.closest('.quote-card').style.opacity = '0.3';
+            btn.closest('.quote-card').style.pointerEvents = 'none';
+        }, 1000);
     } catch (e) {
         btn.innerHTML = "❌";
         btn.disabled = false;
+        setTimeout(() => btn.innerHTML = originalContent, 2000);
     }
-}
-
-function buildPagination(limit) {
-    const totalPages = Math.ceil(total / limit);
-    const box = document.getElementById('pagination');
-    box.innerHTML = '';
-    if (totalPages <= 1) return;
-
-    const createBtn = (p, label, isActive = false, isDots = false) => {
-        let d = document.createElement('div');
-        d.className = `page ${isActive ? 'active' : ''} ${isDots ? 'dots' : ''}`;
-        d.textContent = label;
-        if (!isActive && !isDots) {
-            d.onclick = () => { page = p; loadData(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-        }
-        return d;
-    };
-
-    // Prev Button
-    if (page > 1) box.appendChild(createBtn(page - 1, '◀ Prev'));
-
-    // First Page
-    box.appendChild(createBtn(1, '1', page === 1));
-
-    // Middle Logic with Dots
-    let start = Math.max(2, page - 1);
-    let end = Math.min(totalPages - 1, page + 1);
-
-    if (start > 2) box.appendChild(createBtn(0, '...', false, true));
-
-    for (let i = start; i <= end; i++) {
-        box.appendChild(createBtn(i, i, page === i));
-    }
-
-    if (end < totalPages - 1) box.appendChild(createBtn(0, '...', false, true));
-
-    // Last Page
-    if (totalPages > 1) {
-        box.appendChild(createBtn(totalPages, totalPages, page === totalPages));
-    }
-
-    // Next Button
-    if (page < totalPages) box.appendChild(createBtn(page + 1, 'Next ▶'));
 }
 
 function copyQuote(btn, text) {
