@@ -2,226 +2,363 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quote Vault Pro | Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>QuoteVault | Mobile</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
+            --bg: #09090b;
+            --surface: #18181b;
+            --surface-light: #27272a;
             --accent: #3b82f6;
-            --done: #22c55e;
-            --remove: #ef4444;
-            --text: #f8fafc;
-            --bg: #0f172a;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --text-main: #fafafa;
+            --text-dim: #a1a1aa;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --nav-height: 70px;
+            --header-height: 65px;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
-            font-family: 'Inter', system-ui, sans-serif;
-            background: radial-gradient(circle at top right, #1e293b, #0f172a);
-            background-attachment: fixed;
-            color: var(--text);
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding-bottom: calc(var(--nav-height) + 20px);
         }
 
+        /* --- Header --- */
         header {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            padding: 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--glass-border);
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .container { padding: 16px; max-width: 1100px; margin: auto; }
-
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            align-items: center;
-        }
-
-        .status-toggles {
-            display: flex;
-            gap: 8px;
-        }
-
-        .toggle-chip {
-            flex: 1;
-            padding: 9px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: #94a3b8;
-            font-size: 10px;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.3s;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        .toggle-chip.active.green { background: var(--done); color: white; border-color: var(--done); }
-        .toggle-chip.active.red { background: var(--remove); color: white; border-color: var(--remove); }
-
-        input, select, button {
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            background: rgba(0, 0, 0, 0.2);
-            color: white;
-            outline: none;
-            font-size: 13px;
-        }
-
-        button { background: var(--accent); font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
-        button:disabled { background: #475569; cursor: not-allowed; }
-
-        #quotes {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .quote-card { display: flex; flex-direction: column; justify-content: space-between; min-height: 200px; margin-bottom: 0; }
-        .quoteText { font-size: 17px; line-height: 1.6; margin-bottom: 20px; white-space: pre-wrap; }
-
-        .meta {
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 12px;
-            color: #94a3b8;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 101;
+            height: var(--header-height);
         }
 
-        .action-row { display: flex; gap: 8px; margin-top: 15px; }
-        .btn-sm { padding: 8px; font-size: 11px; flex: 1; border-radius: 8px; cursor: pointer; border: none; color: white; }
-        .btn-done { background: var(--done); }
-        .btn-remove { background: var(--remove); }
-        .btn-copy { background: rgba(255,255,255,0.1); border: 1px solid var(--glass-border); }
+        header h1 { font-size: 1.5rem; margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        header .status-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); }
 
-        .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; align-items: center; }
-        .tab {
-            padding: 10px 18px; background: var(--glass); border-radius: 12px; cursor: pointer;
-            border: 1px solid var(--glass-border); white-space: nowrap; font-size: 14px; transition: 0.3s;
+        /* --- App Container --- */
+        .app-container { padding: 0 16px; }
+
+        /* --- API Connection (Collapsed by default) --- */
+        .connection-drawer {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--surface-light);
         }
-        .tab.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
-        .stat-item { background: var(--glass); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid var(--glass-border); }
-        .stat-item b { display: block; color: var(--accent); font-size: 18px; }
-        .stat-item span { font-size: 10px; color: #64748b; text-transform: uppercase; }
-
-        .url-preview { font-family: monospace; font-size: 10px; color: #60a5fa; margin-top: 10px; word-break: break-all; opacity: 0.7; }
-
-        /* Infinite Scroll Loader */
-        #loader {
-            text-align: center;
-            padding: 40px;
+        input {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--surface-light);
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: white;
             font-size: 14px;
-            color: #94a3b8;
-            grid-column: 1 / -1;
-        }
-        .spinner {
-            display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-radius: 50%;
-            border-top-color: var(--accent);
-            animation: spin 1s ease-in-out infinite;
             margin-bottom: 10px;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- Tabs (Sticky Horizontal Pill Nav) --- */
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 16px 15px;
+            margin: 0 -16px; /* Bleed to edges */
+            scrollbar-width: none;
+            position: sticky;
+            top: var(--header-height);
+            background: var(--bg);
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+
+        .tab-pill {
+            padding: 8px 20px;
+            background: var(--surface);
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dim);
+            border: 1px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .tab-pill.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        /* --- Month Grid --- */
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .month-btn {
+            padding: 8px;
+            background: var(--surface-light);
+            border-radius: 8px;
+            font-size: 11px;
+            text-align: center;
+            color: var(--text-dim);
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .month-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* --- Quote Cards --- */
+        #quotes { display: flex; flex-direction: column; gap: 16px; padding-top: 15px; }
+
+        .quote-card {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid var(--surface-light);
+            transition: transform 0.2s;
+        }
+        .quote-card:active { transform: scale(0.98); }
+
+        .quote-content {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            font-weight: 400;
+            white-space: pre-wrap;
+        }
+
+        .quote-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--surface-light);
+        }
+
+        .stats-group { display: flex; gap: 12px; font-size: 12px; color: var(--text-dim); }
+        .stats-group span i { margin-right: 4px; color: var(--accent); }
+
+        /* --- Bottom Action Bar --- */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-light);
+            color: var(--text-main);
+        }
+
+        .btn-action.blue { color: var(--accent); }
+        .btn-action.green { color: var(--success); }
+        .btn-action.red { color: var(--danger); }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(24, 24, 27, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid var(--surface-light);
+            padding-bottom: 15px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 10px;
+            text-decoration: none;
+            gap: 4px;
+        }
+        .nav-item.active { color: var(--accent); }
+        .nav-item i { font-size: 20px; }
+
+        /* --- Filter Sheet --- */
+        #filterSheet {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-radius: 30px 30px 0 0;
+            padding: 30px 20px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2000;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #filterSheet.open { bottom: 0; }
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--surface-light);
+            border-radius: 2px;
+            margin: -15px auto 20px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            z-index: 1500;
+        }
+
+        .loading-shimmer {
+            height: 100px;
+            background: linear-gradient(90deg, var(--surface) 25%, var(--surface-light) 50%, var(--surface) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 20px;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
     </style>
 </head>
 <body>
 
-<header>📖 QUOTE VAULT PRO</header>
-
-<div class="container">
-
-    <div class="glass-card">
-        <div style="display: flex; gap: 8px;">
-            <input id="api" style="flex:1" value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
-            <button onclick="loadSheets()">Connect</button>
-        </div>
-        <div id="preview-url" class="url-preview">Ready to connect...</div>
+<header>
+    <h1>QuoteVault<span style="color:var(--accent)">.</span></h1>
+    <div style="display: flex; align-items:center; gap: 15px;">
+        <i class="fa-solid fa-circle-nodes" onclick="toggleElement('api-drawer')" style="color: var(--text-dim)"></i>
+        <div class="status-dot"></div>
     </div>
+</header>
 
-    <div id="tabs" class="tabs"></div>
-
-    <div class="glass-card">
-        <div class="filters">
-            <input id="search" placeholder="Search keywords...">
-            
-            <div class="status-toggles">
-                <div id="hideDone" class="toggle-chip active red" onclick="toggleFilter(this)">XUpdated</div>
-                <div id="hideRemoved" class="toggle-chip active red" onclick="toggleFilter(this)">Removed</div>
-            </div>
-
-            <select id="month">
-                <option value="">All Months</option>
-                <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
-                <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
-                <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
-                <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
-            </select>
-            <input type="date" id="from">
-            <input type="date" id="to">
-            <button onclick="applyFilters()">Apply Filters</button>
-        </div>
-    </div>
-
-    <div class="stats" id="stats"></div>
+<div class="app-container">
     
-    <div id="quotes"></div>
-    
-    <!-- Sentinel element for Intersection Observer -->
-    <div id="loader">
-        <div class="spinner"></div>
-        <div>Loading more quotes...</div>
+    <div id="api-drawer" class="connection-drawer" style="display: none;">
+        <input id="api" value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
+        <button onclick="loadSheets()" style="width:100%; background: var(--accent); border:none; padding:12px; border-radius:12px; color:white; font-weight:bold;">Connect API</button>
     </div>
 
+    <div id="tabs" class="tabs-container">
+        <!-- Tabs injected here -->
+    </div>
+
+    <div id="quotes">
+        <!-- Skeleton Loading State -->
+        <div class="loading-shimmer"></div>
+        <div class="loading-shimmer" style="margin-top:10px"></div>
+    </div>
+
+    <div id="loader" style="text-align:center; padding: 40px 0; color: var(--text-dim); font-size: 13px;">
+        <i class="fa-solid fa-spinner fa-spin"></i> Fetching more quotes...
+    </div>
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+        <i class="fa-solid fa-house-chimney"></i>
+        <span>Home</span>
+    </a>
+    <a href="#" class="nav-item" onclick="toggleFilterSheet()">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Filters</span>
+    </a>
+    <!-- <a href="#" class="nav-item" onclick="scrollToTop()">
+        <i class="fa-solid fa-arrow-up"></i>
+        <span>Top</span>
+    </a> -->
+    <a href="#" class="nav-item" onclick="toggleElement('api-drawer')">
+        <i class="fa-solid fa-gear"></i>
+        <span>Setup</span>
+    </a>
+</nav>
+
+<!-- Filter Bottom Sheet -->
+<div id="overlay" class="overlay" onclick="toggleFilterSheet()"></div>
+<div id="filterSheet">
+    <div class="sheet-handle"></div>
+    <h3 style="margin-top:0">Refine Vault</h3>
+    
+    <input id="search" placeholder="Search keywords..." oninput="debounceFilter()">
+    
+    <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 8px; font-weight: 600;">FILTER BY MONTH</div>
+    <div class="month-grid" id="monthGrid">
+        <!-- Month buttons -->
+        <div class="month-btn" onclick="selectMonth(1, this)">Jan</div>
+        <div class="month-btn" onclick="selectMonth(2, this)">Feb</div>
+        <div class="month-btn" onclick="selectMonth(3, this)">Mar</div>
+        <div class="month-btn" onclick="selectMonth(4, this)">Apr</div>
+        <div class="month-btn" onclick="selectMonth(5, this)">May</div>
+        <div class="month-btn" onclick="selectMonth(6, this)">Jun</div>
+        <div class="month-btn" onclick="selectMonth(7, this)">Jul</div>
+        <div class="month-btn" onclick="selectMonth(8, this)">Aug</div>
+        <div class="month-btn" onclick="selectMonth(9, this)">Sep</div>
+        <div class="month-btn" onclick="selectMonth(10, this)">Oct</div>
+        <div class="month-btn" onclick="selectMonth(11, this)">Nov</div>
+        <div class="month-btn" onclick="selectMonth(12, this)">Dec</div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+        <div id="hideDone" class="tab-pill" onclick="this.classList.toggle('active'); applyFilters()" style="text-align:center">Hide Done</div>
+        <div id="hideRemoved" class="tab-pill" onclick="this.classList.toggle('active'); applyFilters()" style="text-align:center">Hide Removed</div>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+        <input type="date" id="from" style="flex:1">
+        <input type="date" id="to" style="flex:1">
+    </div>
+
+    <button onclick="toggleFilterSheet()" style="width:100%; background: var(--accent); border:none; padding:15px; border-radius:16px; color:white; font-weight:bold; margin-top:10px;">Show Results</button>
 </div>
 
 <script>
 let currentSheet = "";
 let page = 1;
-const limit = 20;
+const limit = 15;
 let isLoading = false;
 let hasMore = true;
+let debounceTimer;
+let selectedMonth = null; // Store selected month
 
-// Initialize Intersection Observer
-const observer = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting && !isLoading && hasMore) {
-        loadData(true);
-    }
-}, { threshold: 0.1 });
-
-observer.observe(document.getElementById('loader'));
-
+// Core logic
 async function apiCall(url, method = 'GET', body = null) {
     const options = { method };
     if (body) options.body = JSON.stringify(body);
@@ -237,23 +374,32 @@ async function loadSheets() {
         box.innerHTML = '';
         sheets.forEach((s, idx) => {
             let d = document.createElement('div');
-            d.className = 'tab';
+            d.className = 'tab-pill';
             d.textContent = s;
             d.onclick = () => {
                 if (currentSheet === s) return;
                 currentSheet = s;
-                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                document.querySelectorAll('#tabs .tab-pill').forEach(x => x.classList.remove('active'));
                 d.classList.add('active');
                 applyFilters();
             };
             box.appendChild(d);
             if(idx === 0) d.click();
         });
-    } catch(e) { alert("API Connection Failed"); }
+        document.getElementById('api-drawer').style.display = 'none';
+    } catch(e) { alert("Connection Error"); }
 }
 
-function toggleFilter(el) {
-    el.classList.toggle('active');
+function selectMonth(m, el) {
+    const isAlreadySelected = el.classList.contains('active');
+    document.querySelectorAll('.month-btn').forEach(btn => btn.classList.remove('active'));
+    
+    if (isAlreadySelected) {
+        selectedMonth = null;
+    } else {
+        el.classList.add('active');
+        selectedMonth = m;
+    }
     applyFilters();
 }
 
@@ -261,8 +407,12 @@ function applyFilters() {
     page = 1;
     hasMore = true;
     document.getElementById('quotes').innerHTML = '';
-    document.getElementById('loader').style.display = 'block';
     loadData(false);
+}
+
+function debounceFilter() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(applyFilters, 500);
 }
 
 async function loadData(isAppend = false) {
@@ -271,46 +421,31 @@ async function loadData(isAppend = false) {
     isLoading = true;
     const api = document.getElementById('api').value;
     const search = document.getElementById('search').value;
-    const month = document.getElementById('month').value;
     const from = document.getElementById('from').value;
     const to = document.getElementById('to').value;
-
     const hideDone = document.getElementById('hideDone').classList.contains('active');
     const hideRemoved = document.getElementById('hideRemoved').classList.contains('active');
 
     let url = `${api}?sheet=${currentSheet}&page=${page}&limit=${limit}`;
     if (search) url += `&contains=${encodeURIComponent(search)}`;
-    if (month) url += `&month=${month}`;
     if (from && to) url += `&from=${from}&to=${to}`;
-
-    document.getElementById('preview-url').textContent = url;
+    if (selectedMonth) url += `&month=${selectedMonth}`; // Month API Parameter added
 
     try {
         const res = await apiCall(url);
         let data = res.data || [];
         
-        // Filter logic
         if(hideDone) data = data.filter(r => r.xupdate !== 'DONE');
         if(hideRemoved) data = data.filter(r => r.remove !== 'remove');
 
-        if (data.length < 1) {
-            hasMore = false;
-            document.getElementById('loader').style.display = 'none';
-        }
-
+        if (data.length < limit) hasMore = false;
         renderQuotes(data, isAppend);
-        
-        document.getElementById('stats').innerHTML = `
-            <div class="stat-item"><b>${res.total || '...'}</b><span>Total Available</span></div>
-            <div class="stat-item"><b>${page}</b><span>Pages Loaded</span></div>
-            <div class="stat-item"><b>${currentSheet}</b><span>Source</span></div>
-        `;
-
         page++;
     } catch (e) {
-        console.error("Load failed", e);
+        console.error(e);
     } finally {
         isLoading = false;
+        document.getElementById('loader').style.display = hasMore ? 'block' : 'none';
     }
 }
 
@@ -320,69 +455,81 @@ function renderQuotes(data, append) {
 
     data.forEach((r) => {
         const text = r.content || r.quote || "";
-        const rawDate = r.datetime || r.date || '';
-        const dateStr = rawDate ? new Date(rawDate).toLocaleDateString() : 'No Date';
-        const escapedText = text.replace(/`/g, '\\`').replace(/\$/g, '\\$');
-
+        const date = r.datetime || r.date ? new Date(r.datetime || r.date).toLocaleDateString() : 'Recent';
+        
         let div = document.createElement('div');
-        div.className = 'glass-card quote-card';
+        div.className = 'quote-card';
         div.innerHTML = `
-            <div class="quoteText">${text}</div>
-            <div>
-                <div class="meta">
-                    <span>📅 ${dateStr}</span>
-                    <div style="display:flex; gap:8px">
-                        <span>❤️ ${r.likes || 0}</span>
-                        <span>👁️ ${r.views || 0}</span>
-                    </div>
+            <div class="quote-content">${text}</div>
+            <div class="quote-meta">
+                <div class="stats-group">
+                    <span><i class="fa-solid fa-heart"></i> ${r.likes || 0}</span>
+                    <span><i class="fa-solid fa-eye"></i> ${r.views || 0}</span>
                 </div>
-                <div class="action-row">
-                    <button class="btn-sm btn-copy" onclick="copyQuote(this, \`${escapedText}\`)">📋 Copy</button>
-                    <button class="btn-sm btn-done" onclick="updateRow(this, \`${r.tweetURL}\`, 'xupdate', 'DONE')">✔ Xupdate</button>
-                    <button class="btn-sm btn-remove" onclick="updateRow(this, \`${r.tweetURL}\`, 'remove', 'remove')">✖ Remove</button>
-                </div>
+                <div style="font-size:11px; color:var(--text-dim)">${date}</div>
+            </div>
+            <div class="action-grid">
+                <button class="btn-action blue" onclick="copyQuote(this, \`${text.replace(/'/g, "\\'")}\`)">
+                    <i class="fa-solid fa-copy"></i> Copy
+                </button>
+                <button class="btn-action green" onclick="updateRow(this, \`${r.tweetURL}\`, 'xupdate', 'DONE')">
+                    <i class="fa-solid fa-check-double"></i> Done
+                </button>
+                <button class="btn-action red" onclick="updateRow(this, \`${r.tweetURL}\`, 'remove', 'remove')">
+                    <i class="fa-solid fa-trash-can"></i> Del
+                </button>
             </div>`;
         container.appendChild(div);
     });
 }
 
-async function updateRow(btn, identifier, column, value) {
-    const api = document.getElementById('api').value;
-    const originalContent = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = "⏳";
+function toggleFilterSheet() {
+    const sheet = document.getElementById('filterSheet');
+    const overlay = document.getElementById('overlay');
+    const isOpen = sheet.classList.contains('open');
+    
+    sheet.classList.toggle('open');
+    overlay.style.display = isOpen ? 'none' : 'block';
+}
 
-    const payload = {
-        action: "update",
-        sheet: currentSheet,
-        where: { "tweetURL": identifier }, 
-        data: { [column]: value }
-    };
+function toggleElement(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
 
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function updateRow(btn, id, col, val) {
+    const original = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    
+    const payload = { action: "update", sheet: currentSheet, where: { "tweetURL": id }, data: { [col]: val } };
+    
     try {
-        // Using fetch with no-cors as per original setup
-        await fetch(api, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
-        btn.innerHTML = "✅";
-        // Visually hide the card after a short delay since it's now 'done/removed'
-        setTimeout(() => {
-            btn.closest('.quote-card').style.opacity = '0.3';
-            btn.closest('.quote-card').style.pointerEvents = 'none';
-        }, 1000);
+        await fetch(document.getElementById('api').value, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> OK';
+        setTimeout(() => btn.closest('.quote-card').style.opacity = '0.3', 500);
     } catch (e) {
-        btn.innerHTML = "❌";
-        btn.disabled = false;
-        setTimeout(() => btn.innerHTML = originalContent, 2000);
+        btn.innerHTML = original;
     }
 }
 
 function copyQuote(btn, text) {
     navigator.clipboard.writeText(text);
     const old = btn.innerHTML;
-    btn.innerHTML = "✅ Copied";
-    setTimeout(() => btn.innerHTML = old, 1200);
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved';
+    setTimeout(() => btn.innerHTML = old, 1500);
 }
+
+const observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !isLoading && hasMore) loadData(true);
+}, { threshold: 0.1 });
+observer.observe(document.getElementById('loader'));
 
 window.onload = loadSheets;
 </script>
+
 </body>
 </html>
