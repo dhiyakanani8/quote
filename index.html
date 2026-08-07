@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>QuoteVault Pro | Master Station</title>
     <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@100..800&family=Baloo+Bhai+2:wght@400..800&family=Farsan&family=Hind+Vadodara:wght@300..700&family=Mogra&family=Mukta+Vaani:wght@200..800&family=Rasa:ital,wght@0,300..700;1,300..700&family=Shrikhand&family=Noto+Sans+Gujarati:wght@100..900&family=Kumar+One&family=Laila:wght@300..700&family=Kalam:wght@300..700&family=Montserrat:wght@100..900&family=Poppins:wght@100..900&family=Bebas+Neue&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@100..800&family=Baloo+Bhai+2:wght@400..800&family=Farsan&family=Hind+Vadodara:wght@300..700&family=Mogra&family=Mukta+Vaani:wght@200..800&family=Rasa:ital,wght@0,300..700;1,300..700&family=Shrikhand&family=Noto+Sans+Gujarati:wght@100..900&family=Kumar+One&family=Laila:wght@300..700&family=Kalam:wght@300..700&family=Montserrat:wght@100..900&family=Poppins:wght@100..900&family=Bebas+Neue&family=Space+Grotesk:wght@300..700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -20,409 +23,777 @@
         }
 
         /* Theme Variants */
-        body.theme-solar { --bg: #1a1614; --surface: #26211e; --surface-light: #362f2b; --accent: #eab308; }
-        body.theme-ocean { --bg: #0f172a; --surface: #1e293b; --surface-light: #334155; --accent: #0ea5e9; }
-        body.theme-emerald { --bg: #061611; --surface: #0a241c; --surface-light: #123d30; --accent: #10b981; }
+        body.theme-solar {
+            --bg: #1a1614;
+            --surface: #26211e;
+            --surface-light: #362f2b;
+            --accent: #eab308;
+        }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-main); overflow-x: hidden; padding-bottom: calc(var(--nav-height) + 20px); transition: background 0.3s; }
+        body.theme-ocean {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --accent: #0ea5e9;
+        }
+
+        body.theme-emerald {
+            --bg: #061611;
+            --surface: #0a241c;
+            --surface-light: #123d30;
+            --accent: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            padding-bottom: calc(var(--nav-height) + 20px);
+            transition: background 0.3s;
+        }
 
         /* --- Global Input Styles --- */
-        input, select { 
-            width: 100%; background: var(--bg); border: 1px solid var(--surface-light); 
-            padding: 12px 16px; border-radius: 12px; color: white; font-family: inherit;
-            outline: none; transition: 0.2s;
+        input,
+        select {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--surface-light);
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
         }
-        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
 
-        .btn-primary { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer; }
-        .btn-secondary { background: var(--surface-light); color: var(--text-dim); border: none; padding: 14px; border-radius: 12px; font-weight: 700; width: 100%; cursor: pointer; }
+        input:focus,
+        select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: var(--surface-light);
+            color: var(--text-dim);
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+        }
 
         /* --- Header --- */
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid var(--surface-light); }
-        .logo { font-size: 20px; font-weight: 900; letter-spacing: -1px; }
-        .logo span { color: var(--accent); }
+        header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--surface-light);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
 
         /* --- Setup Drawer --- */
-        .setup-drawer { display: none; padding: 20px; background: var(--surface); margin: 10px; border-radius: 20px; border: 1px solid var(--surface-light); }
-        .setup-label { font-size: 10px; font-weight: 800; color: var(--text-dim); margin: 15px 0 6px; text-transform: uppercase; }
+        .setup-drawer {
+            display: none;
+            padding: 20px;
+            background: var(--surface);
+            margin: 10px;
+            border-radius: 20px;
+            border: 1px solid var(--surface-light);
+        }
+
+        .setup-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-dim);
+            margin: 15px 0 6px;
+            text-transform: uppercase;
+        }
 
         /* --- Tabs --- */
-        .tabs-container { display: flex; gap: 10px; overflow-x: auto; padding: 15px; scrollbar-width: none; background: var(--bg); position: sticky; top: 55px; z-index: 999; }
-        .tab-pill { padding: 8px 18px; background: var(--surface); border-radius: 30px; white-space: nowrap; font-size: 13px; color: var(--text-dim); border: 1px solid var(--surface-light); cursor: pointer; }
-        .tab-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 15px;
+            scrollbar-width: none;
+            background: var(--bg);
+            position: sticky;
+            top: 55px;
+            z-index: 999;
+        }
+
+        .tab-pill {
+            padding: 8px 18px;
+            background: var(--surface);
+            border-radius: 30px;
+            white-space: nowrap;
+            font-size: 13px;
+            color: var(--text-dim);
+            border: 1px solid var(--surface-light);
+            cursor: pointer;
+        }
+
+        .tab-pill.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
 
         /* --- Cards --- */
-        .quote-card { background: var(--surface); border-radius: 24px; padding: 22px; border: 1px solid var(--surface-light); margin: 15px; }
-        .quote-content { font-size: 17px; line-height: 1.6; white-space: pre-wrap; margin-bottom: 20px; font-family: 'Anek Gujarati'; }
-        .action-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .action-btn { background: var(--surface-light); border: none; padding: 10px 5px; border-radius: 14px; color: white; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; }
+        .quote-card {
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 22px;
+            border: 1px solid var(--surface-light);
+            margin: 15px;
+        }
+
+        .quote-content {
+            font-size: 17px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+            font-family: 'Anek Gujarati';
+        }
+
+        .action-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: var(--surface-light);
+            border: none;
+            padding: 10px 5px;
+            border-radius: 14px;
+            color: white;
+            font-size: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
 
         /* --- Filter Drawer --- */
-        #filterDrawer { position: fixed; bottom: -100%; left: 0; right: 0; width: 100%; background: var(--surface); border-radius: 30px 30px 0 0; padding: 25px; z-index: 2100; transition: 0.4s ease; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
-        #filterDrawer.open { bottom: 0; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; z-index: 1500; backdrop-filter: blur(5px); }
+        #filterDrawer {
+            position: fixed;
+            bottom: -100%;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: var(--surface);
+            border-radius: 30px 30px 0 0;
+            padding: 25px;
+            z-index: 2100;
+            transition: 0.4s ease;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
 
-        .month-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 15px 0; }
-        .month-pill { padding: 10px; background: var(--bg); border: 1px solid var(--surface-light); border-radius: 10px; text-align: center; font-size: 12px; color: var(--text-dim); cursor: pointer; }
-        .month-pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+        #filterDrawer.open {
+            bottom: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 1500;
+            backdrop-filter: blur(5px);
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .month-pill {
+            padding: 10px;
+            background: var(--bg);
+            border: 1px solid var(--surface-light);
+            border-radius: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-dim);
+            cursor: pointer;
+        }
+
+        .month-pill.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
 
         /* --- STUDIO --- */
-        #studio { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 3000; display: none; flex-direction: column; }
-        .canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; background: #0a0a0a; }
-        #canvas { 
-            position: relative; width: 100%; max-width: 340px; aspect-ratio: 1/1; 
-            background: var(--accent); display: flex; align-items: center; justify-content: center; 
-            padding: 40px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            background-size: cover; background-position: center; transition: background 0.2s;
+        #studio {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
         }
-        #canvas-text { font-size: 22px; color: #fff; outline: none; white-space: pre-wrap; z-index: 5; text-shadow: 0 2px 10px rgba(0,0,0,0.3); width: 100%; font-family: 'Anek Gujarati'; }
 
-        .studio-controls { background: var(--surface); border-radius: 30px 30px 0 0; padding: 20px; max-height: 55vh; overflow-y: auto; border-top: 1px solid var(--surface-light); }
-        .c-tab-row { display: flex; border-bottom: 1px solid var(--surface-light); margin-bottom: 15px; }
-        .c-tab { flex: 1; padding: 10px; text-align: center; font-size: 12px; color: var(--text-dim); font-weight: 800; cursor: pointer; }
-        .c-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-        .pane { display: none; }
-        .pane.active { display: block; }
-        
-        .scroll-row { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
-        .color-dot { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.2); }
-        .font-card { background: var(--surface-light); padding: 12px 20px; border-radius: 12px; white-space: nowrap; cursor: pointer; border: 1px solid transparent; font-size: 14px; }
-        
-        .dynamic-picker { display: flex; align-items: center; gap: 15px; margin-top: 10px; background: var(--bg); padding: 10px; border-radius: 12px; }
-        .picker-btn { width: 40px; height: 40px; border-radius: 8px; border: 2px solid #fff; padding: 0; overflow: hidden; cursor: pointer; flex-shrink:0; }
-        .picker-btn input { width: 60px; height: 60px; border: none; cursor: pointer; margin: -10px; }
+        .canvas-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #0a0a0a;
+        }
+
+        #canvas {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            aspect-ratio: 1/1;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            background-size: cover;
+            background-position: center;
+            transition: background 0.2s;
+        }
+
+        #canvas-text {
+            font-size: 22px;
+            color: #fff;
+            outline: none;
+            white-space: pre-wrap;
+            z-index: 5;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            font-family: 'Anek Gujarati';
+        }
+
+        .studio-controls {
+            background: var(--surface);
+            border-radius: 30px 30px 0 0;
+            padding: 20px;
+            max-height: 55vh;
+            overflow-y: auto;
+            border-top: 1px solid var(--surface-light);
+        }
+
+        .c-tab-row {
+            display: flex;
+            border-bottom: 1px solid var(--surface-light);
+            margin-bottom: 15px;
+        }
+
+        .c-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-dim);
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .c-tab.active {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .pane {
+            display: none;
+        }
+
+        .pane.active {
+            display: block;
+        }
+
+        .scroll-row {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: none;
+        }
+
+        .color-dot {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .font-card {
+            background: var(--surface-light);
+            padding: 12px 20px;
+            border-radius: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid transparent;
+            font-size: 14px;
+        }
+
+        .dynamic-picker {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            background: var(--bg);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .picker-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            padding: 0;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .picker-btn input {
+            width: 60px;
+            height: 60px;
+            border: none;
+            cursor: pointer;
+            margin: -10px;
+        }
 
         /* --- Footer --- */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--nav-height); background: rgba(0,0,0,0.9); border-top: 1px solid var(--surface-light); display: flex; justify-content: space-around; align-items: center; z-index: 1000; padding-bottom: 15px; }
-        .nav-item { color: var(--text-dim); text-decoration: none; font-size: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .nav-item.active { color: var(--accent); }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid var(--surface-light);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            padding-bottom: 15px;
+        }
+
+        .nav-item {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
     </style>
 </head>
+
 <body>
 
-<header>
-    <div class="logo">Quote<span>Vault.</span></div>
-    <div style="display:flex; gap:12px; align-items:center;">
-        <i class="fa-solid fa-sliders" onclick="toggleElement('setup-drawer')" style="color:var(--text-dim)"></i>
-        <div id="counter" style="font-size:10px; font-weight:900; background:var(--accent); color:white; padding:4px 10px; border-radius:20px;">0 / 0</div>
-    </div>
-</header>
-
-<!-- Setup Drawer -->
-<div id="setup-drawer" class="setup-drawer">
-    <div class="setup-label">Google Apps Script URL</div>
-    <input id="api-url" value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
-    
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div>
-            <div class="setup-label">Page Load Limit</div>
-            <input type="number" id="page-limit" value="12">
+    <header>
+        <div class="logo">Quote<span>Vault.</span></div>
+        <div style="display:flex; gap:12px; align-items:center;">
+            <i class="fa-solid fa-sliders" onclick="toggleElement('setup-drawer')" style="color:var(--text-dim)"></i>
+            <div id="counter"
+                style="font-size:10px; font-weight:900; background:var(--accent); color:white; padding:4px 10px; border-radius:20px;">
+                0 / 0</div>
         </div>
-        <div>
-            <div class="setup-label">UI Theme</div>
-            <select id="theme-select" onchange="document.body.className = this.value">
-                <option value="">Midnight (OLED)</option>
-                <option value="theme-solar">Solar (Warm)</option>
-                <option value="theme-ocean">Ocean (Blue)</option>
-                <option value="theme-emerald">Emerald (Green)</option>
-            </select>
-        </div>
-    </div>
+    </header>
 
-    <div class="setup-label">Global Signature (Prefix Name)</div>
-    <input id="prefix-name" placeholder="e.g. @Creative_Writes" value="">
+    <!-- Setup Drawer -->
+    <div id="setup-drawer" class="setup-drawer">
+        <div class="setup-label">Google Apps Script URL</div>
+        <input id="api-url"
+            value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
 
-    <button onclick="loadSheets()" class="btn-primary" style="margin-top:10px;">Sync & Save Workspace</button>
-</div>
-
-<div id="tabs" class="tabs-container"></div>
-<div id="quotes-list"></div>
-<div id="loader" style="text-align:center; padding: 30px; color: var(--text-dim);"><i class="fa-solid fa-spinner fa-spin fa-2xl"></i></div>
-
-<!-- Advanced Filter Drawer -->
-<div class="overlay" id="overlay" onclick="toggleFilter()"></div>
-<div id="filterDrawer">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h3 style="margin:0">Advanced Filters</h3>
-        <button onclick="resetFilters()" style="background:none; border:none; color:var(--accent); font-weight:bold; font-size:12px;">Reset All</button>
-    </div>
-
-    <div class="setup-label">Keyword Search</div>
-    <input id="search-input" placeholder="Enter keywords..." oninput="debounceFilter()">
-
-    <div class="setup-label">Date Archive (Monthly)</div>
-    <div class="month-grid">
-        <div class="month-pill" onclick="setMonth(1, this)">Jan</div>
-        <div class="month-pill" onclick="setMonth(2, this)">Feb</div>
-        <div class="month-pill" onclick="setMonth(3, this)">Mar</div>
-        <div class="month-pill" onclick="setMonth(4, this)">Apr</div>
-        <div class="month-pill" onclick="setMonth(5, this)">May</div>
-        <div class="month-pill" onclick="setMonth(6, this)">Jun</div>
-        <div class="month-pill" onclick="setMonth(7, this)">Jul</div>
-        <div class="month-pill" onclick="setMonth(8, this)">Aug</div>
-        <div class="month-pill" onclick="setMonth(9, this)">Sep</div>
-        <div class="month-pill" onclick="setMonth(10, this)">Oct</div>
-        <div class="month-pill" onclick="setMonth(11, this)">Nov</div>
-        <div class="month-pill" onclick="setMonth(12, this)">Dec</div>
-    </div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div>
-            <div class="setup-label">From Date</div>
-            <input type="date" id="date-from">
-        </div>
-        <div>
-            <div class="setup-label">To Date</div>
-            <input type="date" id="date-to">
-        </div>
-    </div>
-
-    <button onclick="applyFilters()" class="btn-primary" style="margin-top:20px;">Apply Filters</button>
-</div>
-
-<!-- Studio Editor -->
-<div id="studio">
-    <div style="padding:15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--surface-light);">
-        <i class="fa-solid fa-chevron-down" onclick="closeStudio()"></i>
-        <span style="font-weight:900; letter-spacing:1px; font-size:14px;">CREATOR STUDIO</span>
-        <button onclick="exportImage()" id="expBtn" style="background:var(--accent); border:none; color:white; padding:8px 18px; border-radius:8px; font-weight:800; font-size:12px;">EXPORT HD</button>
-    </div>
-
-    <div class="canvas-wrap">
-        <div id="canvas">
-            <div id="canvas-text" contenteditable="true">તમારો વિચાર...</div>
-        </div>
-    </div>
-
-    <div class="studio-controls">
-        <div class="c-tab-row">
-            <div class="c-tab active" onclick="switchPane('p-txt', this)">Text</div>
-            <div class="c-tab" onclick="switchPane('p-bg', this)">Background</div>
-            <div class="c-tab" onclick="switchPane('p-lay', this)">Ratio</div>
-        </div>
-
-        <div id="p-txt" class="pane active">
-            <div class="scroll-row" id="font-list"></div>
-            <div class="setup-label">Color & Size</div>
-            <div class="dynamic-picker">
-                <div class="picker-btn"><input type="color" value="#ffffff" oninput="updateStyle('color', this.value)"></div>
-                <input type="range" min="12" max="80" value="24" oninput="updateStyle('fontSize', this.value + 'px')" style="flex:1">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div>
+                <div class="setup-label">Page Load Limit</div>
+                <input type="number" id="page-limit" value="12">
             </div>
-            <div class="setup-label">Font Weight</div>
-            <input type="range" min="100" max="900" step="100" value="400" oninput="updateStyle('fontWeight', this.value)">
+            <div>
+                <div class="setup-label">UI Theme</div>
+                <select id="theme-select" onchange="document.body.className = this.value">
+                    <option value="">Midnight (OLED)</option>
+                    <option value="theme-solar">Solar (Warm)</option>
+                    <option value="theme-ocean">Ocean (Blue)</option>
+                    <option value="theme-emerald">Emerald (Green)</option>
+                </select>
+            </div>
         </div>
 
-        <div id="p-bg" class="pane">
-            <div class="scroll-row">
-                <button class="month-pill active" id="mode-solid" onclick="setBgMode('solid')">Solid</button>
-                <button class="month-pill" id="mode-grad" onclick="setBgMode('grad')">Gradient</button>
-                <button class="month-pill" onclick="document.getElementById('bg-up').click()">Gallery</button>
-                <input type="file" id="bg-up" hidden accept="image/*" onchange="uploadImage(this)">
+        <div class="setup-label">Global Signature (Prefix Name)</div>
+        <input id="prefix-name" placeholder="e.g. @Creative_Writes" value="">
+
+        <button onclick="loadSheets()" class="btn-primary" style="margin-top:10px;">Sync & Save Workspace</button>
+    </div>
+
+    <div id="tabs" class="tabs-container"></div>
+    <div id="quotes-list"></div>
+    <div id="loader" style="text-align:center; padding: 30px; color: var(--text-dim);"><i
+            class="fa-solid fa-spinner fa-spin fa-2xl"></i></div>
+
+    <!-- Advanced Filter Drawer -->
+    <div class="overlay" id="overlay" onclick="toggleFilter()"></div>
+    <div id="filterDrawer">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="margin:0">Advanced Filters</h3>
+            <button onclick="resetFilters()"
+                style="background:none; border:none; color:var(--accent); font-weight:bold; font-size:12px;">Reset
+                All</button>
+        </div>
+
+        <div class="setup-label">Keyword Search</div>
+        <input id="search-input" placeholder="Enter keywords..." oninput="debounceFilter()">
+
+        <!-- START OF QUICK JUMP OPTION -->
+        <div class="setup-label">Quick Jump (Start from Page)</div>
+        <input type="number" id="jump-page" value="1" min="1" placeholder="e.g. 25">
+        <!-- END OF QUICK JUMP OPTION -->
+
+        <div class="setup-label">Date Archive (Monthly)</div>
+        <div class="month-grid">
+            <div class="month-pill" onclick="setMonth(1, this)">Jan</div>
+            <div class="month-pill" onclick="setMonth(2, this)">Feb</div>
+            <div class="month-pill" onclick="setMonth(3, this)">Mar</div>
+            <div class="month-pill" onclick="setMonth(4, this)">Apr</div>
+            <div class="month-pill" onclick="setMonth(5, this)">May</div>
+            <div class="month-pill" onclick="setMonth(6, this)">Jun</div>
+            <div class="month-pill" onclick="setMonth(7, this)">Jul</div>
+            <div class="month-pill" onclick="setMonth(8, this)">Aug</div>
+            <div class="month-pill" onclick="setMonth(9, this)">Sep</div>
+            <div class="month-pill" onclick="setMonth(10, this)">Oct</div>
+            <div class="month-pill" onclick="setMonth(11, this)">Nov</div>
+            <div class="month-pill" onclick="setMonth(12, this)">Dec</div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div>
+                <div class="setup-label">From Date</div>
+                <input type="date" id="date-from">
             </div>
-            <div id="ctrl-solid" class="dynamic-picker">
-                <div class="picker-btn"><input type="color" id="pick-solid" value="#3b82f6" oninput="refreshBg()"></div>
-                <div class="scroll-row" id="presets-s" style="flex:1; padding:0"></div>
+            <div>
+                <div class="setup-label">To Date</div>
+                <input type="date" id="date-to">
             </div>
-            <div id="ctrl-grad" style="display:none">
+        </div>
+
+        <button onclick="applyFilters()" class="btn-primary" style="margin-top:20px;">Apply Filters</button>
+    </div>
+
+    <!-- Studio Editor -->
+    <div id="studio">
+        <div
+            style="padding:15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--surface-light);">
+            <i class="fa-solid fa-chevron-down" onclick="closeStudio()"></i>
+            <span style="font-weight:900; letter-spacing:1px; font-size:14px;">CREATOR STUDIO</span>
+            <button onclick="exportImage()" id="expBtn"
+                style="background:var(--accent); border:none; color:white; padding:8px 18px; border-radius:8px; font-weight:800; font-size:12px;">EXPORT
+                HD</button>
+        </div>
+
+        <div class="canvas-wrap">
+            <div id="canvas">
+                <div id="canvas-text" contenteditable="true">તમારો વિચાર...</div>
+            </div>
+        </div>
+
+        <div class="studio-controls">
+            <div class="c-tab-row">
+                <div class="c-tab active" onclick="switchPane('p-txt', this)">Text</div>
+                <div class="c-tab" onclick="switchPane('p-bg', this)">Background</div>
+                <div class="c-tab" onclick="switchPane('p-lay', this)">Ratio</div>
+            </div>
+
+            <div id="p-txt" class="pane active">
+                <div class="scroll-row" id="font-list"></div>
+                <div class="setup-label">Color & Size</div>
                 <div class="dynamic-picker">
-                    <div class="picker-btn"><input type="color" id="pick-g1" value="#3b82f6" oninput="refreshBg()"></div>
-                    <div class="picker-btn"><input type="color" id="pick-g2" value="#8b5cf6" oninput="refreshBg()"></div>
-                    <input type="range" min="0" max="360" value="45" id="pick-ang" oninput="refreshBg()" style="flex:1">
+                    <div class="picker-btn"><input type="color" value="#ffffff"
+                            oninput="updateStyle('color', this.value)"></div>
+                    <input type="range" min="12" max="80" value="24"
+                        oninput="updateStyle('fontSize', this.value + 'px')" style="flex:1">
                 </div>
-                <div class="scroll-row" id="presets-g"></div>
+                <div class="setup-label">Font Weight</div>
+                <input type="range" min="100" max="900" step="100" value="400"
+                    oninput="updateStyle('fontWeight', this.value)">
             </div>
-        </div>
 
-        <div id="p-lay" class="pane">
-            <div class="setup-label">Canvas Ratio</div>
-            <div class="scroll-row">
-                <button class="month-pill active" onclick="setRatio('1/1', this)">1:1 Post</button>
-                <button class="month-pill" onclick="setRatio('4/5', this)">4:5 Portrait</button>
-                <button class="month-pill" onclick="setRatio('9/16', this)">9:16 Story</button>
-                <button class="month-pill" onclick="setRatio('16/9', this)">16:9 Landscape</button>
+            <div id="p-bg" class="pane">
+                <div class="scroll-row">
+                    <button class="month-pill active" id="mode-solid" onclick="setBgMode('solid')">Solid</button>
+                    <button class="month-pill" id="mode-grad" onclick="setBgMode('grad')">Gradient</button>
+                    <button class="month-pill" onclick="document.getElementById('bg-up').click()">Gallery</button>
+                    <input type="file" id="bg-up" hidden accept="image/*" onchange="uploadImage(this)">
+                </div>
+                <div id="ctrl-solid" class="dynamic-picker">
+                    <div class="picker-btn"><input type="color" id="pick-solid" value="#3b82f6" oninput="refreshBg()">
+                    </div>
+                    <div class="scroll-row" id="presets-s" style="flex:1; padding:0"></div>
+                </div>
+                <div id="ctrl-grad" style="display:none">
+                    <div class="dynamic-picker">
+                        <div class="picker-btn"><input type="color" id="pick-g1" value="#3b82f6" oninput="refreshBg()">
+                        </div>
+                        <div class="picker-btn"><input type="color" id="pick-g2" value="#8b5cf6" oninput="refreshBg()">
+                        </div>
+                        <input type="range" min="0" max="360" value="45" id="pick-ang" oninput="refreshBg()"
+                            style="flex:1">
+                    </div>
+                    <div class="scroll-row" id="presets-g"></div>
+                </div>
+            </div>
+
+            <div id="p-lay" class="pane">
+                <div class="setup-label">Canvas Ratio</div>
+                <div class="scroll-row">
+                    <button class="month-pill active" onclick="setRatio('1/1', this)">1:1 Post</button>
+                    <button class="month-pill" onclick="setRatio('4/5', this)">4:5 Portrait</button>
+                    <button class="month-pill" onclick="setRatio('9/16', this)">9:16 Story</button>
+                    <button class="month-pill" onclick="setRatio('16/9', this)">16:9 Landscape</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<nav class="bottom-nav">
-    <a href="#" class="nav-item active" onclick="scrollToTop()"><i class="fa-solid fa-quote-left"></i><span>Vault</span></a>
-    <a href="#" class="nav-item" onclick="toggleFilter()"><i class="fa-solid fa-magnifying-glass"></i><span>Filter</span></a>
-    <a href="#" class="nav-item" onclick="openStudio('')"><i class="fa-solid fa-circle-plus" style="font-size:26px; color:var(--accent)"></i><span>Create</span></a>
-</nav>
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="scrollToTop()"><i
+                class="fa-solid fa-quote-left"></i><span>Vault</span></a>
+        <a href="#" class="nav-item" onclick="toggleFilter()"><i
+                class="fa-solid fa-magnifying-glass"></i><span>Filter</span></a>
+        <a href="#" class="nav-item" onclick="openStudio('')"><i class="fa-solid fa-circle-plus"
+                style="font-size:26px; color:var(--accent)"></i><span>Create</span></a>
+    </nav>
 
-<script>
-let currentSheet = "", page = 1, isLoading = false, hasMore = true, bgMode = 'solid', selectedMonth = null;
-const fonts = ['Anek Gujarati', 'Baloo Bhai 2', 'Hind Vadodara', 'Mukta Vaani', 'Rasa', 'Farsan', 'Mogra', 'Shrikhand', 'Poppins', 'Bebas Neue', 'Montserrat', 'Kumar One', 'Laila', 'Kalam'];
-const sColors = ['#000', '#fff', '#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'];
-const gColors = [{c1: '#ff512f', c2: '#dd2476'}, {c1: '#1CB5E0', c2: '#000851'}, {c1: '#00F260', c2: '#0575E6'}, {c1: '#8E2DE2', c2: '#4A00E0'}];
+    <script>
+        let currentSheet = "", page = 1, isLoading = false, hasMore = true, bgMode = 'solid', selectedMonth = null;
+        const fonts = ['Anek Gujarati', 'Baloo Bhai 2', 'Hind Vadodara', 'Mukta Vaani', 'Rasa', 'Farsan', 'Mogra', 'Shrikhand', 'Poppins', 'Bebas Neue', 'Montserrat', 'Kumar One', 'Laila', 'Kalam'];
+        const sColors = ['#000', '#fff', '#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'];
+        const gColors = [{ c1: '#ff512f', c2: '#dd2476' }, { c1: '#1CB5E0', c2: '#000851' }, { c1: '#00F260', c2: '#0575E6' }, { c1: '#8E2DE2', c2: '#4A00E0' }];
 
-function init() {
-    // Populate Fonts
-    const fBox = document.getElementById('font-list');
-    fonts.forEach(f => {
-        const d = document.createElement('div'); d.className = 'font-card'; d.style.fontFamily = f; d.innerText = f;
-        d.onclick = () => { document.getElementById('canvas-text').style.fontFamily = f; };
-        fBox.appendChild(d);
-    });
+        function init() {
+            // Populate Fonts
+            const fBox = document.getElementById('font-list');
+            fonts.forEach(f => {
+                const d = document.createElement('div'); d.className = 'font-card'; d.style.fontFamily = f; d.innerText = f;
+                d.onclick = () => { document.getElementById('canvas-text').style.fontFamily = f; };
+                fBox.appendChild(d);
+            });
 
-    // Populate Presets
-    const sBox = document.getElementById('presets-s');
-    sColors.forEach(c => {
-        const d = document.createElement('div'); d.className = 'color-dot'; d.style.background = c;
-        d.onclick = () => { document.getElementById('pick-solid').value = c; refreshBg(); };
-        sBox.appendChild(d);
-    });
+            // Populate Presets
+            const sBox = document.getElementById('presets-s');
+            sColors.forEach(c => {
+                const d = document.createElement('div'); d.className = 'color-dot'; d.style.background = c;
+                d.onclick = () => { document.getElementById('pick-solid').value = c; refreshBg(); };
+                sBox.appendChild(d);
+            });
 
-    const gBox = document.getElementById('presets-g');
-    gColors.forEach(g => {
-        const d = document.createElement('div'); d.className = 'color-dot'; d.style.background = `linear-gradient(45deg, ${g.c1}, ${g.c2})`;
-        d.onclick = () => { document.getElementById('pick-g1').value = g.c1; document.getElementById('pick-g2').value = g.c2; refreshBg(); };
-        gBox.appendChild(d);
-    });
+            const gBox = document.getElementById('presets-g');
+            gColors.forEach(g => {
+                const d = document.createElement('div'); d.className = 'color-dot'; d.style.background = `linear-gradient(45deg, ${g.c1}, ${g.c2})`;
+                d.onclick = () => { document.getElementById('pick-g1').value = g.c1; document.getElementById('pick-g2').value = g.c2; refreshBg(); };
+                gBox.appendChild(d);
+            });
 
-    loadSheets();
-}
+            loadSheets();
+        }
 
-async function loadSheets() {
-    const api = document.getElementById('api-url').value;
-    try {
-        const res = await fetch(api + '?sheet=tweets&action=sheets').then(r => r.json());
-        const box = document.getElementById('tabs'); box.innerHTML = '';
-        res.forEach((s, i) => {
-            const btn = document.createElement('div'); btn.className = 'tab-pill'; btn.innerText = s;
-            btn.onclick = () => { currentSheet = s; document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active'); applyFilters(); };
-            box.appendChild(btn); if(i === 0) btn.click();
-        });
-        document.getElementById('setup-drawer').style.display = 'none';
-    } catch(e) { console.log("Check API Connection"); }
-}
+        async function loadSheets() {
+            const api = document.getElementById('api-url').value;
+            try {
+                const res = await fetch(api + '?sheet=tweets&action=sheets').then(r => r.json());
+                const box = document.getElementById('tabs'); box.innerHTML = '';
+                res.forEach((s, i) => {
+                    const btn = document.createElement('div'); btn.className = 'tab-pill'; btn.innerText = s;
+                    btn.onclick = () => { currentSheet = s; document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active'); applyFilters(); };
+                    box.appendChild(btn); if (i === 0) btn.click();
+                });
+                document.getElementById('setup-drawer').style.display = 'none';
+            } catch (e) { console.log("Check API Connection"); }
+        }
 
-async function loadData(append = false) {
-    if(!currentSheet || isLoading || (!hasMore && append)) return;
-    isLoading = true;
-    const api = document.getElementById('api-url').value;
-    const limit = document.getElementById('page-limit').value || 12;
-    const prefix = document.getElementById('prefix-name').value;
-    const search = document.getElementById('search-input').value;
-    const from = document.getElementById('date-from').value;
-    const to = document.getElementById('date-to').value;
+        async function loadData(append = false) {
+            if (!currentSheet || isLoading || (!hasMore && append)) return;
+            isLoading = true;
+            const api = document.getElementById('api-url').value;
+            const limit = document.getElementById('page-limit').value || 12;
+            const prefix = document.getElementById('prefix-name').value;
+            const search = document.getElementById('search-input').value;
+            const from = document.getElementById('date-from').value;
+            const to = document.getElementById('date-to').value;
 
-    let url = `${api}?sheet=${currentSheet}&page=${page}&limit=${limit}`;
-    if(search) url += `&contains=${encodeURIComponent(search)}`;
-    if(selectedMonth) url += `&month=${selectedMonth}`;
-    if(from && to) url += `&from=${from}&to=${to}`;
+            let url = `${api}?sheet=${currentSheet}&page=${page}&limit=${limit}`;
+            if (search) url += `&contains=${encodeURIComponent(search)}`;
+            if (selectedMonth) url += `&month=${selectedMonth}`;
+            if (from && to) url += `&from=${from}&to=${to}`;
 
-    try {
-        const res = await fetch(url).then(r => r.json());
-        const data = res.data || [];
-        document.getElementById('counter').innerText = `${append ? document.querySelectorAll('.quote-card').length + data.length : data.length} / ${res.total || '...'}`;
-        
-        const container = document.getElementById('quotes-list');
-        if(!append) container.innerHTML = '';
-        
-        data.forEach(r => {
-            let text = r.content || r.quote || "";
-            if(prefix) text += `\n\n${prefix}`;
-            
-            const card = document.createElement('div'); card.className = 'quote-card';
-            card.innerHTML = `<div class="quote-content">${text}</div>
+            try {
+                const res = await fetch(url).then(r => r.json());
+                const data = res.data || [];
+                document.getElementById('counter').innerText = `${append ? document.querySelectorAll('.quote-card').length + data.length : data.length} / ${res.total || '...'}`;
+
+                const container = document.getElementById('quotes-list');
+                if (!append) container.innerHTML = '';
+
+                data.forEach(r => {
+                    let text = r.content || r.quote || "";
+                    if (prefix) text += `\n\n${prefix}`;
+
+                    const card = document.createElement('div'); card.className = 'quote-card';
+                    card.innerHTML = `<div class="quote-content">${text}</div>
                 <div class="action-row">
                     <button class="action-btn" onclick="copyQ(this, \`${text.replace(/'/g, "\\'")}\`)"><i class="fa-solid fa-copy"></i>Copy</button>
                     <button class="action-btn" onclick="openStudio(\`${text.replace(/'/g, "\\'")}\`)"><i class="fa-solid fa-palette"></i>Post</button>
                     <button class="action-btn" onclick="updateR(this, \`${r.tweetURL}\`, 'xupdate', 'DONE')"><i class="fa-solid fa-check"></i>Done</button>
                     <button class="action-btn" onclick="updateR(this, \`${r.tweetURL}\`, 'remove', 'remove')"><i class="fa-solid fa-trash"></i>Del</button>
                 </div>`;
-            container.appendChild(card);
-        });
-        hasMore = data.length >= limit;
-        page++;
-    } finally { isLoading = false; document.getElementById('loader').style.display = hasMore ? 'block' : 'none'; }
-}
+                    container.appendChild(card);
+                });
+                hasMore = data.length >= limit;
+                page++;
+            } finally { isLoading = false; document.getElementById('loader').style.display = hasMore ? 'block' : 'none'; }
+        }
 
-// STUDIO WORKFLOW
-function openStudio(text) {
-    document.getElementById('studio').style.display = 'flex';
-    const prefix = document.getElementById('prefix-name').value;
-    document.getElementById('canvas-text').innerText = text || (prefix ? `તમારો વિચાર...\n\n${prefix}` : "તમારો વિચાર...");
-    document.body.style.overflow = 'hidden';
-}
-function closeStudio() { document.getElementById('studio').style.display = 'none'; document.body.style.overflow = 'auto'; }
-function setBgMode(mode) {
-    bgMode = mode;
-    document.getElementById('ctrl-solid').style.display = mode === 'solid' ? 'flex' : 'none';
-    document.getElementById('ctrl-grad').style.display = mode === 'grad' ? 'block' : 'none';
-    document.getElementById('mode-solid').classList.toggle('active', mode === 'solid');
-    document.getElementById('mode-grad').classList.toggle('active', mode === 'grad');
-    refreshBg();
-}
-function refreshBg() {
-    const cv = document.getElementById('canvas'); cv.style.backgroundImage = 'none';
-    if(bgMode === 'solid') { cv.style.background = document.getElementById('pick-solid').value; }
-    else {
-        const c1 = document.getElementById('pick-g1').value, c2 = document.getElementById('pick-g2').value, ang = document.getElementById('pick-ang').value;
-        cv.style.background = `linear-gradient(${ang}deg, ${c1}, ${c2})`;
-    }
-}
-function uploadImage(input) {
-    const reader = new FileReader(); reader.onload = (e) => { 
-        document.getElementById('canvas').style.backgroundImage = `url('${e.target.result}')`; 
-    }; reader.readAsDataURL(input.files[0]);
-}
-async function exportImage() {
-    const btn = document.getElementById('expBtn'); btn.innerText = "Scaling...";
-    const canvas = await html2canvas(document.getElementById('canvas'), { scale: 4, useCORS: true });
-    const link = document.createElement('a'); link.download = `QuoteVault_${Date.now()}.png`; 
-    link.href = canvas.toDataURL("image/png"); link.click(); btn.innerText = "EXPORT HD";
-}
+        // STUDIO WORKFLOW
+        function openStudio(text) {
+            document.getElementById('studio').style.display = 'flex';
+            const prefix = document.getElementById('prefix-name').value;
+            document.getElementById('canvas-text').innerText = text || (prefix ? `તમારો વિચાર...\n\n${prefix}` : "તમારો વિચાર...");
+            document.body.style.overflow = 'hidden';
+        }
+        function closeStudio() { document.getElementById('studio').style.display = 'none'; document.body.style.overflow = 'auto'; }
+        function setBgMode(mode) {
+            bgMode = mode;
+            document.getElementById('ctrl-solid').style.display = mode === 'solid' ? 'flex' : 'none';
+            document.getElementById('ctrl-grad').style.display = mode === 'grad' ? 'block' : 'none';
+            document.getElementById('mode-solid').classList.toggle('active', mode === 'solid');
+            document.getElementById('mode-grad').classList.toggle('active', mode === 'grad');
+            refreshBg();
+        }
+        function refreshBg() {
+            const cv = document.getElementById('canvas'); cv.style.backgroundImage = 'none';
+            if (bgMode === 'solid') { cv.style.background = document.getElementById('pick-solid').value; }
+            else {
+                const c1 = document.getElementById('pick-g1').value, c2 = document.getElementById('pick-g2').value, ang = document.getElementById('pick-ang').value;
+                cv.style.background = `linear-gradient(${ang}deg, ${c1}, ${c2})`;
+            }
+        }
+        function uploadImage(input) {
+            const reader = new FileReader(); reader.onload = (e) => {
+                document.getElementById('canvas').style.backgroundImage = `url('${e.target.result}')`;
+            }; reader.readAsDataURL(input.files[0]);
+        }
+        async function exportImage() {
+            const btn = document.getElementById('expBtn'); btn.innerText = "Scaling...";
+            const canvas = await html2canvas(document.getElementById('canvas'), { scale: 4, useCORS: true });
+            const link = document.createElement('a'); link.download = `QuoteVault_${Date.now()}.png`;
+            link.href = canvas.toDataURL("image/png"); link.click(); btn.innerText = "EXPORT HD";
+        }
 
-// FILTERS & UTILS
-function setMonth(m, el) {
-    document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
-    if(selectedMonth === m) { selectedMonth = null; } 
-    else { selectedMonth = m; el.classList.add('active'); }
-}
-function applyFilters() { 
-    page = 1; hasMore = true; 
-    loadData(false); 
-    document.getElementById('filterDrawer').classList.remove('open');
-    document.getElementById('overlay').style.display = 'none';
-}
-function resetFilters() {
-    document.getElementById('search-input').value = '';
-    document.getElementById('date-from').value = '';
-    document.getElementById('date-to').value = '';
-    selectedMonth = null;
-    document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
-    applyFilters();
-}
-function debounceFilter() { clearTimeout(window.dt); window.dt = setTimeout(applyFilters, 500); }
-function toggleFilter() {
-    const d = document.getElementById('filterDrawer'), o = document.getElementById('overlay');
-    const isOpen = d.classList.toggle('open'); o.style.display = isOpen ? 'block' : 'none';
-}
-function switchPane(id, btn) {
-    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.c-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id).classList.add('active'); btn.classList.add('active');
-}
-function updateStyle(p, v) { document.getElementById('canvas-text').style[p] = v; }
-function setRatio(r, b) { 
-    document.getElementById('canvas').style.aspectRatio = r; 
-    document.querySelectorAll('#p-lay .month-pill').forEach(btn => btn.classList.remove('active'));
-    b.classList.add('active');
-}
-function toggleElement(id) { const e = document.getElementById(id); e.style.display = e.style.display === 'none' ? 'block' : 'none'; }
-function copyQ(btn, txt) { navigator.clipboard.writeText(txt); btn.innerHTML = '<i class="fa-solid fa-check"></i>'; setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-copy"></i>Copy', 1500); }
-async function updateR(btn, id, col, val) {
-    fetch(document.getElementById('api-url').value, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "update", sheet: currentSheet, where: { "tweetURL": id }, data: { [col]: val } }) });
-    btn.closest('.quote-card').style.opacity = '0.3';
-}
-function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        // FILTERS & UTILS
+        function setMonth(m, el) {
+            document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
+            if (selectedMonth === m) { selectedMonth = null; }
+            else { selectedMonth = m; el.classList.add('active'); }
+        }
+        function applyFilters() {
+            // Get value from Jump input, default to 1 if empty
+            const jumpTo = parseInt(document.getElementById('jump-page').value) || 1;
+            page = jumpTo;
+            hasMore = true;
+            loadData(false);
+            document.getElementById('filterDrawer').classList.remove('open');
+            document.getElementById('overlay').style.display = 'none';
+        }
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('date-from').value = '';
+            document.getElementById('date-to').value = '';
+            document.getElementById('jump-page').value = '1';
+            selectedMonth = null;
+            document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
+            applyFilters();
+        }
+        function debounceFilter() { clearTimeout(window.dt); window.dt = setTimeout(applyFilters, 500); }
+        function toggleFilter() {
+            const d = document.getElementById('filterDrawer'), o = document.getElementById('overlay');
+            const isOpen = d.classList.toggle('open'); o.style.display = isOpen ? 'block' : 'none';
+        }
+        function switchPane(id, btn) {
+            document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.c-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active'); btn.classList.add('active');
+        }
+        function updateStyle(p, v) { document.getElementById('canvas-text').style[p] = v; }
+        function setRatio(r, b) {
+            document.getElementById('canvas').style.aspectRatio = r;
+            document.querySelectorAll('#p-lay .month-pill').forEach(btn => btn.classList.remove('active'));
+            b.classList.add('active');
+        }
+        function toggleElement(id) { const e = document.getElementById(id); e.style.display = e.style.display === 'none' ? 'block' : 'none'; }
+        function copyQ(btn, txt) { navigator.clipboard.writeText(txt); btn.innerHTML = '<i class="fa-solid fa-check"></i>'; setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-copy"></i>Copy', 1500); }
+        async function updateR(btn, id, col, val) {
+            fetch(document.getElementById('api-url').value, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "update", sheet: currentSheet, where: { "tweetURL": id }, data: { [col]: val } }) });
+            btn.closest('.quote-card').style.opacity = '0.3';
+        }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-window.onscroll = () => { if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) loadData(true); };
-window.onload = init;
-</script>
+        window.onscroll = () => { if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) loadData(true); };
+        window.onload = init;
+    </script>
 </body>
+
 </html>
