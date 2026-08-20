@@ -190,6 +190,35 @@
             font-family: 'Anek Gujarati';
         }
 
+        .quote-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 11px;
+            color: var(--text-dim);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .meta-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item i {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+
+
         .action-row {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -691,9 +720,22 @@
                 data.forEach(r => {
                     let text = r.content || r.quote || "";
                     if (prefix) text += `\n\n${prefix}`;
+                    
+                    // Format Date nicely if it exists
+                    const dateVal = r.datetime ? new Date(r.datetime).toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}) : 'N/A';
+                    const likesVal = r.likes || 0;
+                    const viewsVal = r.views || 0;
 
                     const card = document.createElement('div'); card.className = 'quote-card';
-                    card.innerHTML = `<div class="quote-content">${text}</div>
+                    card.innerHTML = `
+                <div class="quote-meta">
+                    <div class="meta-item"><i class="fa-regular fa-calendar"></i> ${dateVal}</div>
+                    <div class="meta-group">
+                        <div class="meta-item"><i class="fa-regular fa-heart"></i> ${likesVal}</div>
+                        <div class="meta-item"><i class="fa-regular fa-eye"></i> ${viewsVal}</div>
+                    </div>
+                </div>
+                <div class="quote-content">${text}</div>
                 <div class="action-row">
                     <button class="action-btn" onclick="copyQ(this, \`${text.replace(/'/g, "\\'")}\`)"><i class="fa-solid fa-copy"></i>Copy</button>
                     <button class="action-btn" onclick="openStudio(\`${text.replace(/'/g, "\\'")}\`)"><i class="fa-solid fa-palette"></i>Post</button>
