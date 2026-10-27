@@ -20,6 +20,8 @@
             --text-main: #ffffff;
             --text-dim: #a1a1aa;
             --nav-height: 75px;
+            --green: #059669;
+            --red: #dc2626;
         }
 
         /* Theme Variants */
@@ -59,7 +61,6 @@
             transition: background 0.3s;
         }
 
-        /* --- Global Input Styles --- */
         input,
         select {
             width: 100%;
@@ -90,17 +91,6 @@
             cursor: pointer;
         }
 
-        .btn-secondary {
-            background: var(--surface-light);
-            color: var(--text-dim);
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 700;
-            width: 100%;
-            cursor: pointer;
-        }
-
         /* --- Header --- */
         header {
             padding: 15px 20px;
@@ -109,7 +99,7 @@
             align-items: center;
             position: sticky;
             top: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
             z-index: 1000;
             border-bottom: 1px solid var(--surface-light);
@@ -148,7 +138,7 @@
             display: flex;
             gap: 10px;
             overflow-x: auto;
-            padding: 15px;
+            padding: 12px 15px 6px 15px;
             scrollbar-width: none;
             background: var(--bg);
             position: sticky;
@@ -165,12 +155,56 @@
             color: var(--text-dim);
             border: 1px solid var(--surface-light);
             cursor: pointer;
+            transition: 0.2s;
         }
 
         .tab-pill.active {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
+        }
+
+        /* --- QUICK STATUS FILTER BAR (NEW) --- */
+        .status-toggle-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px 12px 15px;
+            background: var(--bg);
+            position: sticky;
+            top: 105px;
+            z-index: 998;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .toggle-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: var(--surface);
+            border: 1px solid var(--surface-light);
+            color: var(--text-dim);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-chip input[type="checkbox"] {
+            display: none;
+        }
+
+        .toggle-chip.active-chip {
+            background: var(--surface-light);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .toggle-chip i {
+            font-size: 10px;
         }
 
         /* --- Cards --- */
@@ -180,6 +214,15 @@
             padding: 22px;
             border: 1px solid var(--surface-light);
             margin: 15px;
+            transition: opacity 0.3s ease, border-color 0.3s ease;
+        }
+
+        .quote-card.is-done-card {
+            border-color: rgba(5, 150, 105, 0.4);
+        }
+
+        .quote-card.is-del-card {
+            border-color: rgba(220, 38, 38, 0.4);
         }
 
         .quote-content {
@@ -203,7 +246,8 @@
 
         .meta-group {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 10px;
         }
 
         .meta-item {
@@ -217,7 +261,26 @@
             font-size: 12px;
         }
 
+        .status-badge {
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
+        .badge-done {
+            background: rgba(5, 150, 105, 0.2);
+            color: #34d399;
+            border: 1px solid #059669;
+        }
+
+        .badge-del {
+            background: rgba(220, 38, 38, 0.2);
+            color: #f87171;
+            border: 1px solid #dc2626;
+        }
 
         .action-row {
             display: grid;
@@ -227,7 +290,7 @@
 
         .action-btn {
             background: var(--surface-light);
-            border: none;
+            border: 1px solid transparent;
             padding: 10px 5px;
             border-radius: 14px;
             color: white;
@@ -237,6 +300,22 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* DISTINCT ACTION BUTTON COLORS */
+        .btn-state-done {
+            background: var(--green) !important;
+            color: #ffffff !important;
+            border-color: #34d399 !important;
+            box-shadow: 0 0 10px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-state-del {
+            background: var(--red) !important;
+            color: #ffffff !important;
+            border-color: #f87171 !important;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
         }
 
         /* --- Filter Drawer --- */
@@ -475,7 +554,7 @@
     <header>
         <div class="logo">Quote<span>Vault.</span></div>
         <div style="display:flex; gap:12px; align-items:center;">
-            <i class="fa-solid fa-sliders" onclick="toggleElement('setup-drawer')" style="color:var(--text-dim)"></i>
+            <i class="fa-solid fa-sliders" onclick="toggleElement('setup-drawer')" style="color:var(--text-dim); cursor:pointer;"></i>
             <div id="counter"
                 style="font-size:10px; font-weight:900; background:var(--accent); color:white; padding:4px 10px; border-radius:20px;">
                 0 / 0</div>
@@ -484,7 +563,7 @@
 
     <!-- Setup Drawer -->
     <div id="setup-drawer" class="setup-drawer">
-        <div class="setup-label">Google Apps Script URL</div>
+        <div class="setup-label">Google Apps Script Web App URL</div>
         <input id="api-url"
             value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
 
@@ -510,7 +589,22 @@
         <button onclick="loadSheets()" class="btn-primary" style="margin-top:10px;">Sync & Save Workspace</button>
     </div>
 
+    <!-- Category Tabs -->
     <div id="tabs" class="tabs-container"></div>
+
+    <!-- QUICK STATUS FILTER BAR (Default Checked) -->
+    <div class="status-toggle-bar">
+        <label class="toggle-chip active-chip" id="lbl-hide-done">
+            <input type="checkbox" id="hide-updated" checked onchange="handleCheckboxToggle('hide-updated', 'lbl-hide-done')">
+            <i class="fa-solid fa-check-double"></i> <span>Hide Done</span>
+        </label>
+        <label class="toggle-chip active-chip" id="lbl-hide-del">
+            <input type="checkbox" id="hide-deleted" checked onchange="handleCheckboxToggle('hide-deleted', 'lbl-hide-del')">
+            <i class="fa-solid fa-trash-can"></i> <span>Hide Deleted</span>
+        </label>
+    </div>
+
+    <!-- Quotes Feed -->
     <div id="quotes-list"></div>
     <div id="loader" style="text-align:center; padding: 30px; color: var(--text-dim);"><i
             class="fa-solid fa-spinner fa-spin fa-2xl"></i></div>
@@ -521,17 +615,15 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
             <h3 style="margin:0">Advanced Filters</h3>
             <button onclick="resetFilters()"
-                style="background:none; border:none; color:var(--accent); font-weight:bold; font-size:12px;">Reset
+                style="background:none; border:none; color:var(--accent); font-weight:bold; font-size:12px; cursor:pointer;">Reset
                 All</button>
         </div>
 
         <div class="setup-label">Keyword Search</div>
         <input id="search-input" placeholder="Enter keywords..." oninput="debounceFilter()">
 
-        <!-- START OF QUICK JUMP OPTION -->
         <div class="setup-label">Quick Jump (Start from Page)</div>
         <input type="number" id="jump-page" value="1" min="1" placeholder="e.g. 25">
-        <!-- END OF QUICK JUMP OPTION -->
 
         <div class="setup-label">Date Archive (Monthly)</div>
         <div class="month-grid">
@@ -567,10 +659,10 @@
     <div id="studio">
         <div
             style="padding:15px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--surface-light);">
-            <i class="fa-solid fa-chevron-down" onclick="closeStudio()"></i>
+            <i class="fa-solid fa-chevron-down" onclick="closeStudio()" style="cursor:pointer;"></i>
             <span style="font-weight:900; letter-spacing:1px; font-size:14px;">CREATOR STUDIO</span>
             <button onclick="exportImage()" id="expBtn"
-                style="background:var(--accent); border:none; color:white; padding:8px 18px; border-radius:8px; font-weight:800; font-size:12px;">EXPORT
+                style="background:var(--accent); border:none; color:white; padding:8px 18px; border-radius:8px; font-weight:800; font-size:12px; cursor:pointer;">EXPORT
                 HD</button>
         </div>
 
@@ -638,6 +730,7 @@
         </div>
     </div>
 
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="#" class="nav-item active" onclick="scrollToTop()"><i
                 class="fa-solid fa-quote-left"></i><span>Vault</span></a>
@@ -649,12 +742,17 @@
 
     <script>
         let currentSheet = "", page = 1, isLoading = false, hasMore = true, bgMode = 'solid', selectedMonth = null;
+        
+        // In-memory data maps
+        window.quoteMap = new Map();
+        window.urlMap = new Map();
+        window.stateMap = new Map();
+
         const fonts = ['Anek Gujarati', 'Baloo Bhai 2', 'Hind Vadodara', 'Mukta Vaani', 'Rasa', 'Farsan', 'Mogra', 'Shrikhand', 'Poppins', 'Bebas Neue', 'Montserrat', 'Kumar One', 'Laila', 'Kalam'];
         const sColors = ['#000', '#fff', '#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'];
         const gColors = [{ c1: '#ff512f', c2: '#dd2476' }, { c1: '#1CB5E0', c2: '#000851' }, { c1: '#00F260', c2: '#0575E6' }, { c1: '#8E2DE2', c2: '#4A00E0' }];
 
         function init() {
-            // Populate Fonts
             const fBox = document.getElementById('font-list');
             fonts.forEach(f => {
                 const d = document.createElement('div'); d.className = 'font-card'; d.style.fontFamily = f; d.innerText = f;
@@ -662,7 +760,6 @@
                 fBox.appendChild(d);
             });
 
-            // Populate Presets
             const sBox = document.getElementById('presets-s');
             sColors.forEach(c => {
                 const d = document.createElement('div'); d.className = 'color-dot'; d.style.background = c;
@@ -683,15 +780,30 @@
         async function loadSheets() {
             const api = document.getElementById('api-url').value;
             try {
-                const res = await fetch(api + '?sheet=tweets&action=sheets').then(r => r.json());
+                const res = await fetch(api + '?action=sheets').then(r => r.json());
                 const box = document.getElementById('tabs'); box.innerHTML = '';
                 res.forEach((s, i) => {
                     const btn = document.createElement('div'); btn.className = 'tab-pill'; btn.innerText = s;
-                    btn.onclick = () => { currentSheet = s; document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active')); btn.classList.add('active'); applyFilters(); };
-                    box.appendChild(btn); if (i === 0) btn.click();
+                    btn.onclick = () => { 
+                        currentSheet = s; 
+                        document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active')); 
+                        btn.classList.add('active'); 
+                        applyFilters(); 
+                    };
+                    box.appendChild(btn); 
+                    if (i === 0) btn.click();
                 });
                 document.getElementById('setup-drawer').style.display = 'none';
-            } catch (e) { console.log("Check API Connection"); }
+            } catch (e) { 
+                console.log("Check API Connection", e); 
+            }
+        }
+
+        function handleCheckboxToggle(checkboxId, labelId) {
+            const cb = document.getElementById(checkboxId);
+            const lbl = document.getElementById(labelId);
+            lbl.classList.toggle('active-chip', cb.checked);
+            applyFilters();
         }
 
         async function loadData(append = false) {
@@ -704,59 +816,197 @@
             const from = document.getElementById('date-from').value;
             const to = document.getElementById('date-to').value;
 
+            const hideDone = document.getElementById('hide-updated').checked;
+            const hideDel = document.getElementById('hide-deleted').checked;
+
             let url = `${api}?sheet=${currentSheet}&page=${page}&limit=${limit}`;
             if (search) url += `&contains=${encodeURIComponent(search)}`;
             if (selectedMonth) url += `&month=${selectedMonth}`;
             if (from && to) url += `&from=${from}&to=${to}`;
+            
+            // Tell backend API to also return removed rows so client can show them when unchecked
+            if (!hideDel) url += `&includeRemoved=1`;
 
             try {
                 const res = await fetch(url).then(r => r.json());
                 const data = res.data || [];
-                document.getElementById('counter').innerText = `${append ? document.querySelectorAll('.quote-card').length + data.length : data.length} / ${res.total || '...'}`;
-
+                
                 const container = document.getElementById('quotes-list');
-                if (!append) container.innerHTML = '';
+                if (!append) {
+                    container.innerHTML = '';
+                    window.quoteMap.clear();
+                    window.urlMap.clear();
+                    window.stateMap.clear();
+                }
+
+                let renderedCount = 0;
 
                 data.forEach(r => {
                     let text = r.content || r.quote || "";
                     if (prefix) text += `\n\n${prefix}`;
                     
-                    // Format Date nicely if it exists
+                    const rowNum = r._rowNumber;
+                    const isDone = String(r.xupdate || '').trim().toUpperCase() === 'DONE';
+                    const isRemoved = String(r.Remove || r.remove || '').trim().toLowerCase() === 'remove';
+
+                    // CACHE DATA IN MEMORY
+                    window.quoteMap.set(rowNum, text);
+                    window.urlMap.set(rowNum, r.tweetURL || '');
+                    window.stateMap.set(rowNum, { isDone, isRemoved });
+
+                    // CHECK FILTER CONDITIONS
+                    if (hideDone && isDone) return;
+                    if (hideDel && isRemoved) return;
+
+                    renderedCount++;
+
                     const dateVal = r.datetime ? new Date(r.datetime).toLocaleDateString('en-GB', {day: '2-digit', month: 'short', year: 'numeric'}) : 'N/A';
                     const likesVal = r.likes || 0;
                     const viewsVal = r.views || 0;
 
-                    const card = document.createElement('div'); card.className = 'quote-card';
+                    // STATUS BADGES & BUTTON COLOR STATES
+                    let badgeHtml = '';
+                    let cardClasses = 'quote-card';
+                    if (isDone) {
+                        badgeHtml += '<span class="status-badge badge-done">Done</span>';
+                        cardClasses += ' is-done-card';
+                    }
+                    if (isRemoved) {
+                        badgeHtml += '<span class="status-badge badge-del">Deleted</span>';
+                        cardClasses += ' is-del-card';
+                    }
+
+                    const doneBtnStyle = isDone ? 'btn-state-done' : '';
+                    const delBtnStyle = isRemoved ? 'btn-state-del' : '';
+
+                    const card = document.createElement('div'); 
+                    card.className = cardClasses;
+                    card.id = `card-row-${rowNum}`;
+
                     card.innerHTML = `
-                <div class="quote-meta">
-                    <div class="meta-item"><i class="fa-regular fa-calendar"></i> ${dateVal}</div>
-                    <div class="meta-group">
-                        <div class="meta-item"><i class="fa-regular fa-heart"></i> ${likesVal}</div>
-                        <div class="meta-item"><i class="fa-regular fa-eye"></i> ${viewsVal}</div>
-                    </div>
-                </div>
-                <div class="quote-content">${text}</div>
-                <div class="action-row">
-                    <button class="action-btn" onclick="copyQ(this, \`${text.replace(/'/g, "\\'")}\`)"><i class="fa-solid fa-copy"></i>Copy</button>
-                    <button class="action-btn" onclick="openStudio(\`${text.replace(/'/g, "\\'")}\`)"><i class="fa-solid fa-palette"></i>Post</button>
-                    <button class="action-btn" onclick="updateR(this, \`${r.tweetURL}\`, 'xupdate', 'DONE')"><i class="fa-solid fa-check"></i>Done</button>
-                    <button class="action-btn" onclick="updateR(this, \`${r.tweetURL}\`, 'remove', 'remove')"><i class="fa-solid fa-trash"></i>Del</button>
-                </div>`;
+                        <div class="quote-meta">
+                            <div class="meta-item"><i class="fa-regular fa-calendar"></i> ${dateVal}</div>
+                            <div class="meta-group">
+                                ${badgeHtml}
+                                <div class="meta-item"><i class="fa-regular fa-heart"></i> ${likesVal}</div>
+                                <div class="meta-item"><i class="fa-regular fa-eye"></i> ${viewsVal}</div>
+                            </div>
+                        </div>
+                        <div class="quote-content">${text}</div>
+                        <div class="action-row">
+                            <button class="action-btn" onclick="copyQ(this, ${rowNum})"><i class="fa-solid fa-copy"></i>Copy</button>
+                            <button class="action-btn" onclick="openStudio(${rowNum})"><i class="fa-solid fa-palette"></i>Post</button>
+                            <button class="action-btn ${doneBtnStyle}" id="btn-done-${rowNum}" onclick="toggleState(this, ${rowNum}, 'xupdate', 'DONE')"><i class="fa-solid fa-check"></i>Done</button>
+                            <button class="action-btn ${delBtnStyle}" id="btn-del-${rowNum}" onclick="toggleState(this, ${rowNum}, 'Remove', 'remove')"><i class="fa-solid fa-trash"></i>Del</button>
+                        </div>`;
                     container.appendChild(card);
                 });
+
+                document.getElementById('counter').innerText = `${document.querySelectorAll('.quote-card').length} / ${res.total || '...'}`;
                 hasMore = data.length >= limit;
                 page++;
-            } finally { isLoading = false; document.getElementById('loader').style.display = hasMore ? 'block' : 'none'; }
+            } finally { 
+                isLoading = false; 
+                document.getElementById('loader').style.display = hasMore ? 'block' : 'none'; 
+            }
         }
 
-        // STUDIO WORKFLOW
-        function openStudio(text) {
+        // ==========================================
+        //       INSTANT ACTION TOGGLER & SYNC
+        // ==========================================
+
+        async function toggleState(btn, rowNumber, col, targetVal) {
+            const apiUrl = document.getElementById('api-url').value;
+            const tweetURL = window.urlMap.get(rowNumber) || '';
+            const currentState = window.stateMap.get(rowNumber) || {};
+
+            const isDoneAction = col === 'xupdate';
+            const isCurrentlyActive = isDoneAction ? currentState.isDone : currentState.isRemoved;
+
+            // Toggle value: if already active, toggle OFF (empty ""); else set targetVal
+            const sendVal = isCurrentlyActive ? "" : targetVal;
+
+            // Visual feedback
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            try {
+                await fetch(apiUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: "update",
+                        sheet: currentSheet,
+                        rowNumber: rowNumber,
+                        where: { "tweetURL": tweetURL },
+                        data: { [col]: sendVal }
+                    })
+                });
+
+                // Update memory cache
+                if (isDoneAction) currentState.isDone = !isCurrentlyActive;
+                else currentState.isRemoved = !isCurrentlyActive;
+                window.stateMap.set(rowNumber, currentState);
+
+                const hideDone = document.getElementById('hide-updated').checked;
+                const hideDel = document.getElementById('hide-deleted').checked;
+                const card = document.getElementById(`card-row-${rowNumber}`);
+
+                // If checkbox is checked to HIDE, fade and hide card immediately
+                if ((isDoneAction && hideDone && currentState.isDone) || 
+                    (!isDoneAction && hideDel && currentState.isRemoved)) {
+                    if (card) {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.95)';
+                        setTimeout(() => card.remove(), 300);
+                    }
+                } else {
+                    // Checkbox is unchecked: switch button color state immediately
+                    if (isDoneAction) {
+                        btn.className = currentState.isDone ? 'action-btn btn-state-done' : 'action-btn';
+                        btn.innerHTML = '<i class="fa-solid fa-check"></i>Done';
+                    } else {
+                        btn.className = currentState.isRemoved ? 'action-btn btn-state-del' : 'action-btn';
+                        btn.innerHTML = '<i class="fa-solid fa-trash"></i>Del';
+                    }
+                }
+            } catch (err) {
+                console.error("Action failed:", err);
+                btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+        }
+
+        function copyQ(btn, rowNum) {
+            const txt = window.quoteMap.get(rowNum) || '';
+            navigator.clipboard.writeText(txt);
+            const old = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check" style="color:var(--accent);"></i>Done';
+            setTimeout(() => btn.innerHTML = old, 1500);
+        }
+
+        // ==========================================
+        //            STUDIO WORKFLOW
+        // ==========================================
+
+        function openStudio(rowNumOrText) {
             document.getElementById('studio').style.display = 'flex';
             const prefix = document.getElementById('prefix-name').value;
+            let text = "";
+            if (typeof rowNumOrText === 'number') {
+                text = window.quoteMap.get(rowNumOrText) || "";
+            } else {
+                text = rowNumOrText || "";
+            }
             document.getElementById('canvas-text').innerText = text || (prefix ? `તમારો વિચાર...\n\n${prefix}` : "તમારો વિચાર...");
             document.body.style.overflow = 'hidden';
         }
-        function closeStudio() { document.getElementById('studio').style.display = 'none'; document.body.style.overflow = 'auto'; }
+
+        function closeStudio() { 
+            document.getElementById('studio').style.display = 'none'; 
+            document.body.style.overflow = 'auto'; 
+        }
+
         function setBgMode(mode) {
             bgMode = mode;
             document.getElementById('ctrl-solid').style.display = mode === 'solid' ? 'flex' : 'none';
@@ -765,34 +1015,52 @@
             document.getElementById('mode-grad').classList.toggle('active', mode === 'grad');
             refreshBg();
         }
+
         function refreshBg() {
-            const cv = document.getElementById('canvas'); cv.style.backgroundImage = 'none';
-            if (bgMode === 'solid') { cv.style.background = document.getElementById('pick-solid').value; }
-            else {
+            const cv = document.getElementById('canvas'); 
+            cv.style.backgroundImage = 'none';
+            if (bgMode === 'solid') { 
+                cv.style.background = document.getElementById('pick-solid').value; 
+            } else {
                 const c1 = document.getElementById('pick-g1').value, c2 = document.getElementById('pick-g2').value, ang = document.getElementById('pick-ang').value;
                 cv.style.background = `linear-gradient(${ang}deg, ${c1}, ${c2})`;
             }
         }
+
         function uploadImage(input) {
-            const reader = new FileReader(); reader.onload = (e) => {
+            const reader = new FileReader(); 
+            reader.onload = (e) => {
                 document.getElementById('canvas').style.backgroundImage = `url('${e.target.result}')`;
-            }; reader.readAsDataURL(input.files[0]);
-        }
-        async function exportImage() {
-            const btn = document.getElementById('expBtn'); btn.innerText = "Scaling...";
-            const canvas = await html2canvas(document.getElementById('canvas'), { scale: 4, useCORS: true });
-            const link = document.createElement('a'); link.download = `QuoteVault_${Date.now()}.png`;
-            link.href = canvas.toDataURL("image/png"); link.click(); btn.innerText = "EXPORT HD";
+            }; 
+            reader.readAsDataURL(input.files[0]);
         }
 
-        // FILTERS & UTILS
+        async function exportImage() {
+            const btn = document.getElementById('expBtn'); 
+            btn.innerText = "Scaling...";
+            const canvas = await html2canvas(document.getElementById('canvas'), { scale: 4, useCORS: true });
+            const link = document.createElement('a'); 
+            link.download = `QuoteVault_${Date.now()}.png`;
+            link.href = canvas.toDataURL("image/png"); 
+            link.click(); 
+            btn.innerText = "EXPORT HD";
+        }
+
+        // ==========================================
+        //          FILTERS & PAGINATION
+        // ==========================================
+
         function setMonth(m, el) {
             document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
-            if (selectedMonth === m) { selectedMonth = null; }
-            else { selectedMonth = m; el.classList.add('active'); }
+            if (selectedMonth === m) { 
+                selectedMonth = null; 
+            } else { 
+                selectedMonth = m; 
+                el.classList.add('active'); 
+            }
         }
+
         function applyFilters() {
-            // Get value from Jump input, default to 1 if empty
             const jumpTo = parseInt(document.getElementById('jump-page').value) || 1;
             page = jumpTo;
             hasMore = true;
@@ -800,6 +1068,7 @@
             document.getElementById('filterDrawer').classList.remove('open');
             document.getElementById('overlay').style.display = 'none';
         }
+
         function resetFilters() {
             document.getElementById('search-input').value = '';
             document.getElementById('date-from').value = '';
@@ -809,33 +1078,52 @@
             document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
             applyFilters();
         }
-        function debounceFilter() { clearTimeout(window.dt); window.dt = setTimeout(applyFilters, 500); }
+
+        function debounceFilter() { 
+            clearTimeout(window.dt); 
+            window.dt = setTimeout(applyFilters, 500); 
+        }
+
         function toggleFilter() {
             const d = document.getElementById('filterDrawer'), o = document.getElementById('overlay');
-            const isOpen = d.classList.toggle('open'); o.style.display = isOpen ? 'block' : 'none';
+            const isOpen = d.classList.toggle('open'); 
+            o.style.display = isOpen ? 'block' : 'none';
         }
+
         function switchPane(id, btn) {
             document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.c-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active'); btn.classList.add('active');
+            document.getElementById(id).classList.add('active'); 
+            btn.classList.add('active');
         }
-        function updateStyle(p, v) { document.getElementById('canvas-text').style[p] = v; }
+
+        function updateStyle(p, v) { 
+            document.getElementById('canvas-text').style[p] = v; 
+        }
+
         function setRatio(r, b) {
             document.getElementById('canvas').style.aspectRatio = r;
             document.querySelectorAll('#p-lay .month-pill').forEach(btn => btn.classList.remove('active'));
             b.classList.add('active');
         }
-        function toggleElement(id) { const e = document.getElementById(id); e.style.display = e.style.display === 'none' ? 'block' : 'none'; }
-        function copyQ(btn, txt) { navigator.clipboard.writeText(txt); btn.innerHTML = '<i class="fa-solid fa-check"></i>'; setTimeout(() => btn.innerHTML = '<i class="fa-solid fa-copy"></i>Copy', 1500); }
-        async function updateR(btn, id, col, val) {
-            fetch(document.getElementById('api-url').value, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: "update", sheet: currentSheet, where: { "tweetURL": id }, data: { [col]: val } }) });
-            btn.closest('.quote-card').style.opacity = '0.3';
-        }
-        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-        window.onscroll = () => { if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) loadData(true); };
+        function toggleElement(id) { 
+            const e = document.getElementById(id); 
+            e.style.display = e.style.display === 'none' ? 'block' : 'none'; 
+        }
+
+        function scrollToTop() { 
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        }
+
+        window.onscroll = () => { 
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
+                loadData(true);
+            }
+        };
+
         window.onload = init;
     </script>
 </body>
-
+ 
 </html>
