@@ -564,13 +564,19 @@
     <!-- Setup Drawer -->
     <div id="setup-drawer" class="setup-drawer">
         <div class="setup-label">Google Apps Script Web App URL</div>
-        <input id="api-url"
-            value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
+        <select id="api-url" onchange="onApiChange()">
+            <option value="https://script.google.com/macros/s/AKfycbxk6lpb3kDEq3xp9HdLekqwkF0uJ5cimOmd0iYjZP0g8KakzYrT38E_-LnHKPC-r_OW/exec">
+                Workspace 1 (AKfycbxk6lpb...)
+            </option>
+            <option value="https://script.google.com/macros/s/AKfycbz1n2betusQxtHRpyQVc7OlMK8YAGsNHa60HFu9mZ0Mpg4W8gUdv-R3CJwPPtxH8uhR/exec">
+                Workspace 2 (AKfycbz1n2be...)
+            </option>
+        </select>
 
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
             <div>
                 <div class="setup-label">Page Load Limit</div>
-                <input type="number" id="page-limit" value="12">
+                <input type="number" id="page-limit" value="24">
             </div>
             <div>
                 <div class="setup-label">UI Theme</div>
@@ -777,8 +783,20 @@
             loadSheets();
         }
 
+        // Dropdown switch trigger
+        function onApiChange() {
+            currentSheet = "";
+            page = 1;
+            hasMore = true;
+            document.getElementById('quotes-list').innerHTML = '';
+            document.getElementById('counter').innerText = '0 / 0';
+            loadSheets();
+        }
+
         async function loadSheets() {
             const api = document.getElementById('api-url').value;
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
             try {
                 const res = await fetch(api + '?action=sheets').then(r => r.json());
                 const box = document.getElementById('tabs'); box.innerHTML = '';
@@ -796,6 +814,8 @@
                 document.getElementById('setup-drawer').style.display = 'none';
             } catch (e) { 
                 console.log("Check API Connection", e); 
+            } finally {
+                loader.style.display = 'none';
             }
         }
 
@@ -1125,5 +1145,5 @@
         window.onload = init;
     </script>
 </body>
- 
+
 </html>
